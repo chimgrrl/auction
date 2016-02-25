@@ -132,6 +132,11 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->auth_key;
     }
+	
+	public function getMerchantBrand()
+    {
+        return $this->hasOne(MerchantBrand::className(), ['user_fk' => 'id']);
+    }
 
     /**
      * @inheritdoc

@@ -6,6 +6,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 
 /**
  * Site controller
@@ -67,8 +68,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            //return $this->goBack();
-            return $this->redirect(array('/merchant-brand/index'));
+            $currUser = Yii::$app->user->getIdentity();
+			if($currUser->username == 'admin')
+			{
+				return $this->redirect(array('/merchant-brand/index'));
+			}else{
+				Yii::$app->getSession()->setFlash(
+					'success','<h1>Welcome, user '.$model->username.'</h1>'
+				);
+				return $this->redirect(Yii::$app->getUrlManager()->hostInfo.'/auction/frontend/web/product/index');
+			}
         } else {
             return $this->render('login', [
                 'model' => $model,

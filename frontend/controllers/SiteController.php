@@ -88,7 +88,12 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            //return $this->goBack();
+			 Yii::$app->getSession()->setFlash(
+                            'success','<h1>Welcome, user '.$model->username.'</h1>'
+                        );
+                        
+			return $this->redirect(array('/product/index'));
         } else {
             return $this->render('login', [
                 'model' => $model,

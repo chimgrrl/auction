@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\AttributeBehavior;
@@ -51,6 +52,18 @@ class ProductCategory extends \yii\mongodb\ActiveRecord
 				'class' => AttributeBehavior::className(),
 				'attributes' => ['product_category_status'],
 				'value' => '1',
+			],
+			[
+				'class' => '\yiidreamteam\upload\FileUploadBehavior',
+				'attribute' => 'product_category_icon',
+				'filePath' => '@uploads/[[filename]]_product_category_icon_[[id]].[[extension]]',
+				'fileUrl' => '/auction/uploads/[[filename]]_product_category_icon_[[id]].[[extension]]',
+			],
+			[
+				'class' => '\yiidreamteam\upload\FileUploadBehavior',
+				'attribute' => 'product_category_icon_mobile',
+				'filePath' => '@uploads/[[filename]]_product_category_icon_mobile_[[id]].[[extension]]',
+				'fileUrl' => '/auction/uploads/[[filename]]_product_category_icon_mobile_[[id]].[[extension]]',
 			],
 		];
 	}
@@ -114,7 +127,9 @@ class ProductCategory extends \yii\mongodb\ActiveRecord
 	public function beforeSave($insert)
 	{
 		if (parent::beforeSave($insert)) {
-			$this->product_category_id = Yii::$app->UtilHelper->randString(10);
+			if($insert){
+				$this->product_category_id = Yii::$app->UtilHelper->randString(10);
+			}
 			return true;
 		} else {
 			return false;
@@ -124,5 +139,10 @@ class ProductCategory extends \yii\mongodb\ActiveRecord
 	public function getSubcategories()
 	{
 		return $this->hasMany(ProductCategory::className(),['product_category_parent_id' => 'product_category_id']);
+	}
+	
+	public function getProducts()
+	{
+		return $this->hasMany(Product::className(),['product_category_fk' => 'product_category_id']);
 	}
 }

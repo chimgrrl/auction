@@ -36,13 +36,17 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        // ['label' => 'About', 'url' => ['/site/about']],
+        // ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+$menuItems[] = ['label' => 'Membership', 'url' => ['/membership/mb-memberships']];
+		$menuItems[] = ['label' => 'Products', 'url' => ['/product/index']];
+		//$menuItems[] = ['label' => 'Product Categories', 'url' => ['/product-category/index']];
+		//$menuItems[] = ['label' => 'Product Specifications', 'url' => ['/product-specification/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
             'url' => ['/site/logout'],

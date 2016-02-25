@@ -126,7 +126,7 @@ class ProductCategoryController extends Controller
 		$getParams = Yii::$app->request->get();	
 		
 		
-		$searchCri = array('product_category_parent_id' => array('$exists' => false));
+		$searchCri = array('product_category_parent_id' => '');
 		$allCategories = ProductCategory::findAll($searchCri);
 		$jsonData = array();
 		

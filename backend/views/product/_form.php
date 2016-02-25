@@ -79,9 +79,14 @@ $this->registerJs($chkbxTreeJs, View::POS_END, 'my-options');
 
 <div class="product-form">
 
-    <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
+    <?php $form = ActiveForm::begin([
+		'layout' => 'horizontal',
+		'options' => ['enctype' => 'multipart/form-data'],
+	]); ?>
 
     <?= $form->field($model, 'product_name') ?>
+	
+    <?= $form->field($model, 'product_desc')->textarea() ?>
 
     <?= $form->field($model, 'product_model_number') ?>
 
@@ -106,9 +111,10 @@ $this->registerJs($chkbxTreeJs, View::POS_END, 'my-options');
 
     <?= $form->field($model, 'product_quantity') ?>
 
-    <?= $form->field($model, 'product_ordered') ?>
+    <?= $form->field($model, 'product_picture')->fileInput() ?>
     
-	<?= $form->field($model, 'product_category_fk')->hiddenInput()->label(false) ?>
+	<?= $form->field($model, 'product_category_fk')->hiddenInput()->label(false) ?>	
+	
 	
 	<div class="row">
 	<div class="control-label col-sm-3">

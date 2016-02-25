@@ -28,6 +28,7 @@ use yii\web\UploadedFile;
  * @property mixed $merchant_brand_last_update_date
  * @property mixed $merchant_brand_last_update_user_id
  * @property mixed $merchant_brand_status
+ * @property mixed $user_fk
  */
 class MerchantBrand extends \yii\mongodb\ActiveRecord
 {
@@ -109,7 +110,7 @@ class MerchantBrand extends \yii\mongodb\ActiveRecord
 				'minHeight' => 128, 'maxHeight' => 128,
 			],
 			 ['merchant_brand_status', 'in', 'range' => [0, 1]],
-            [['merchant_brand_id', 'merchant_brand_name1', 'merchant_brand_name2', 'merchant_brand_tag', 'merchant_brand_url', 'merchant_brand_official_url', 'merchant_brand_email', 'merchant_brand_logo_img', 'merchant_brand_logo_img_mobile', 'merchant_brand_search_keywords', 'merchant_brand_create_date', 'merchant_brand_create_user_id', 'merchant_brand_last_update_date', 'merchant_brand_last_update_user_id', 'merchant_brand_status'], 'safe']
+            [['merchant_brand_id', 'merchant_brand_name1', 'merchant_brand_name2', 'merchant_brand_tag', 'merchant_brand_url', 'merchant_brand_official_url', 'merchant_brand_email', 'merchant_brand_logo_img', 'merchant_brand_logo_img_mobile', 'merchant_brand_search_keywords', 'merchant_brand_create_date', 'merchant_brand_create_user_id', 'merchant_brand_last_update_date', 'merchant_brand_last_update_user_id', 'merchant_brand_status','user_fk'], 'safe']
         ];
     }
 
@@ -134,6 +135,7 @@ class MerchantBrand extends \yii\mongodb\ActiveRecord
             'merchant_brand_create_user_id' => Yii::t('app', 'Merchant Brand Create User ID'),
             'merchant_brand_last_update_date' => Yii::t('app', 'Merchant Brand Last Update Date'),
             'merchant_brand_last_update_user_id' => Yii::t('app', 'Merchant Brand Last Update User ID'),
+            'user_fk' => Yii::t('app', 'User Id fk'),
             'merchant_brand_status' => Yii::t('app', 'Merchant Brand Status'),
 			'upload_file1' => Yii::t('app', 'Merchant Brand Logo Image'),
 			'upload_file2' => Yii::t('app', 'Merchant Brand Logo Image for Mobile'),
@@ -149,6 +151,11 @@ class MerchantBrand extends \yii\mongodb\ActiveRecord
     {
 		return $this->hasMany(Membership::className(),['merchant_brand_fk' => '_id']);
 	}
+	
+	public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_fk']);
+    }
 	
 	public function uploadFile($instanceName) {
 		// get the uploaded file instance

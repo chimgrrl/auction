@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\AttributeBehavior;
@@ -12,6 +13,7 @@ use yii\behaviors\AttributeBehavior;
  * @property \MongoId|string $_id
  * @property mixed $product_id
  * @property mixed $product_name
+ * @property mixed $product_desc
  * @property mixed $product_model_number
  * @property mixed $product_price
  * @property mixed $product_unit_weight
@@ -58,6 +60,12 @@ class Product extends \yii\mongodb\ActiveRecord
 				'attributes' => ['product_status'],
 				'value' => '1',
 			],
+			[
+				'class' => '\yiidreamteam\upload\FileUploadBehavior',
+				'attribute' => 'product_picture',
+				'filePath' => '@uploads/[[filename]]_product_picture_[[id]].[[extension]]',
+				'fileUrl' => '/auction/uploads/[[filename]]_product_picture_[[id]].[[extension]]',
+			],
 		];
 	}
 
@@ -70,7 +78,10 @@ class Product extends \yii\mongodb\ActiveRecord
             '_id',
             'product_id',
             'product_name',
+            'product_desc',
+            'product_picture',
             'product_model_number',
+			'product_old_price',
             'product_price',
             'product_unit_weight',
             'product_unit',
@@ -96,7 +107,7 @@ class Product extends \yii\mongodb\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'product_name', 'product_model_number', 'product_price', 'product_unit_weight', 'product_unit', 'product_origin', 'product_manufacturer', 'product_available_date', 'product_quantity', 'product_ordered', 'product_create_date', 'product_create_user_id', 'product_last_update_date', 'product_last_update_user_id', 'product_status', 'product_category_fk', 'product_specification_fk', 'merchant_brand_fk'], 'safe']
+            [['product_id', 'product_name','product_desc','product_picture', 'product_model_number', 'product_price', 'product_unit_weight', 'product_unit', 'product_origin', 'product_manufacturer', 'product_available_date', 'product_quantity', 'product_ordered', 'product_create_date', 'product_create_user_id', 'product_last_update_date', 'product_last_update_user_id', 'product_status', 'product_category_fk', 'product_specification_fk', 'merchant_brand_fk'], 'safe']
         ];
     }
 
@@ -109,6 +120,8 @@ class Product extends \yii\mongodb\ActiveRecord
             '_id' => Yii::t('app', 'ID'),
             'product_id' => Yii::t('app', 'Product ID'),
             'product_name' => Yii::t('app', 'Product Name'),
+            'product_desc' => Yii::t('app', 'Product Description'),
+            'product_picture' => Yii::t('app', 'Product Picture'),
             'product_model_number' => Yii::t('app', 'Product Model Number'),
             'product_price' => Yii::t('app', 'Product Price'),
             'product_unit_weight' => Yii::t('app', 'Product Unit Weight'),
@@ -132,8 +145,14 @@ class Product extends \yii\mongodb\ActiveRecord
 	public function beforeSave($insert)
 	{
 		if (parent::beforeSave($insert)) {
-			$this->product_id = Yii::$app->UtilHelper->randString(10);
-			$this->status = 1;
+			if($insert){
+				if(!empty($this->merchant_brand_fk))
+				{
+					$this->merchant_brand_fk = new \MongoId($this->merchant_brand_fk);
+				}
+				$this->product_id = Yii::$app->UtilHelper->randString(10);
+				$this->product_status = 1;
+			}
 			return true;
 		} else {
 			return false;
@@ -143,5 +162,10 @@ class Product extends \yii\mongodb\ActiveRecord
 	public function getProductCategory()
     {
 		return $this->hasOne(ProductCategory::className(),['product_category_id' => 'product_category_fk']);
+	}
+	
+	public function getMerchantBrand()
+	{
+		return $this->hasOne(MerchantBrand::className(),['merchant_brand_id' => 'merchant_brand_fk']);
 	}
 }
