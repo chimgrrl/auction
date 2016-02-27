@@ -5,6 +5,8 @@ use Yii;
 use common\models\LoginForm;
 use common\models\ProductCategory;
 use common\models\Product;
+use common\models\Membership;
+use common\models\User;
 use portal\models\PasswordResetRequestForm;
 use portal\models\ResetPasswordForm;
 use portal\models\SignupForm;
@@ -26,6 +28,7 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+		/* 
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup'],
@@ -47,7 +50,7 @@ class SiteController extends Controller
                 'actions' => [
                     'logout' => ['post'],
                 ],
-            ],
+            ], */
         ];
     }
 
@@ -173,9 +176,17 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
+        $model = new Membership();
+		$user = new User();
         if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+			$postReq = Yii::$app->request->post();
+			$user->username = $postReq['User']['username'];
+			$user->email = $postReq['User']['email'];
+			$user->new_password = $postReq['User']['new_password'];
+			$user->setPassword();
+			$user->save();
+			$model->membership_login_id = $user->id;
+            if ($model->save()) {
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
@@ -184,6 +195,7 @@ class SiteController extends Controller
 
         return $this->render('signup', [
             'model' => $model,
+            'user' => $user,
         ]);
     }
 

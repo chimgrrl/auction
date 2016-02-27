@@ -42,6 +42,7 @@ Icon::map($this, Icon::FA);
 		        		<div class="collapse navbar-collapse" id="collapse-userui">
 		        			<ul class="nav navbar-nav navbar-left">
 		        				<li><a href="#"><i class="fa fa-user"></i>Login</a></li>
+								<li><a href="site/signup"><i class="fa fa-bolt"></i>Signup</a></li>
 		        				<li><a href="#"><i class="fa fa-shopping-cart"></i>Shopping Cart</a></li>
 		        				<li class="dropdown">
 		        					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span>ENG</a>

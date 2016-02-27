@@ -109,6 +109,15 @@ $this->registerJs($chkbxTreeJs, View::POS_END, 'my-options');
     ]
 ]) ?>
 
+	<?= $form->field($model, 'product_bidding_date')->widget(DatePicker::classname(),[
+    'value' => $model->product_bidding_date,
+    'options' => ['placeholder' => 'Select product bidding date ...'],
+    'pluginOptions' => [
+        'format' => 'dd/m/yyyy',
+        'todayHighlight' => true
+    ]
+]) ?>
+
     <?= $form->field($model, 'product_quantity') ?>
 
     <?= $form->field($model, 'product_picture')->fileInput() ?>

@@ -1,35 +1,60 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \portal\models\SignupForm */
-
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'iDeal - Signup';
 ?>
-<div class="site-signup">
-    <h1><?= Html::encode($this->title) ?></h1>
+<main >
+	    	<section class="sections">
+	    		<div class="container">
+	    			
+	    			<div class="nav-category"><?= Html::a('Home','@web') ?>	><a href="#">Signup</a></div>
+	    			
+	    			<div class="membership-form">
 
-    <p>Please fill out the following fields to signup:</p>
+    <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+    <?= $form->field($user, 'username') ?>
+	
+    <?= $form->field($user, 'new_password')->passwordInput() ?>
 
-                <?= $form->field($model, 'username') ?>
+    <?= $form->field($model, 'membership_first_name') ?>
 
-                <?= $form->field($model, 'email') ?>
+    <?= $form->field($model, 'membership_last_name') ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+    <?= $form->field($model, 'membership_gender')->dropDownList(['M' => 'Male', 'F' => 'Female']) ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
-                </div>
+    <?= $form->field($model, 'membership_date_of_birth')->widget(\yii\jui\DatePicker::classname(), [
+	   'dateFormat' => 'dd/MM/yyyy',
+	   'clientOptions' => [
+		   'changeMonth' => 'true',
+		   'changeYear' => 'true',		   
+		   'defaultDate' => '-1',		   
+		   'yearRange' => '1920:2015',		   
+	   ],
+	   ]) ?>
+	
+	
 
-            <?php ActiveForm::end(); ?>
-        </div>
+    <?= $form->field($model, 'membership_district') ?>
+
+    <?= $form->field($model, 'membership_address') ?>
+
+    <?= $form->field($model, 'membership_contact_telephone') ?>
+
+    <?= $form->field($user, 'email') ?>
+
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Signup'), ['class' => 'btn btn-success']) ?>
     </div>
+
+    <?php ActiveForm::end(); ?>
+
 </div>
+
+
+
+	    		</div>
+    		</section>
+    	</main>

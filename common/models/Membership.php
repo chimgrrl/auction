@@ -28,6 +28,7 @@ use yii\web\UploadedFile;
  * @property mixed $membership_last_update_date
  * @property mixed $membership_status
  * @property mixed $membership_profile_image
+ * @property mixed $membership_credits_points
  */
 class Membership extends \yii\mongodb\ActiveRecord
 {
@@ -86,6 +87,7 @@ class Membership extends \yii\mongodb\ActiveRecord
             'membership_last_update_date',
             'membership_last_update_user_id',
             'membership_status',
+            'membership_credits_points',
             'membership_profile_image',
             'merchant_brand_fk',
         ];
@@ -103,7 +105,7 @@ class Membership extends \yii\mongodb\ActiveRecord
 				'minHeight' => 128, 'maxHeight' => 128,
 			],
 			
-            [['membership_unique_id', 'membership_login_id', 'membership_first_name', 'membership_last_name', 'membership_gender', 'membership_date_of_birth', 'membership_district', 'membership_address', 'membership_contact_telephone', 'membership_email_address', 'membership_current_points', 'membership_current_reputation', 'membership_date_of_joining', 'membership_status', 'membership_profile_image','membership_create_date','membership_last_update_date'], 'safe']
+            [['membership_unique_id', 'membership_login_id', 'membership_first_name', 'membership_last_name', 'membership_gender', 'membership_date_of_birth', 'membership_district', 'membership_address', 'membership_contact_telephone', 'membership_email_address', 'membership_current_points', 'membership_current_reputation', 'membership_date_of_joining', 'membership_status', 'membership_credits_points', 'membership_profile_image','membership_create_date','membership_last_update_date'], 'safe']
         ];
     }
 
@@ -128,6 +130,7 @@ class Membership extends \yii\mongodb\ActiveRecord
             'membership_current_reputation' => 'Membership Current Reputation',
             'membership_date_of_joining' => 'Membership Date Of Joining',
             'membership_status' => 'Membership Status',
+            'membership_credits_points' => 'Membership Points Balance',
             'membership_profile_image' => 'Membership Profile Image Path',
             'upload_file' => 'Membership Profile Image',
             'membership_create_date' => 'Membership Create Date',

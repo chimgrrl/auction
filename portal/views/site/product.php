@@ -3,6 +3,9 @@
 /* @var $this yii\web\View */
 use yii\helpers\Html;
 $this->title = 'iDeal - '.$product->product_name;
+//get days, hours, minutes, seconds
+$biddingDeadline = $product->product_bidding_date;
+
 ?>
 <main >
 	    	<section class="sections">
@@ -38,7 +41,7 @@ $this->title = 'iDeal - '.$product->product_name;
 								    </div>-->
 								</div>
 	    					</div>
-
+							
 	    					<div class="col-md-6 col-sm-7">
 	    						<div class="item-name"><?= $product->product_name?></div>
 	    						<div class="item-desc"><?= $product->product_desc?> </div>

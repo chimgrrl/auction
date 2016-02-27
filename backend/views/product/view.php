@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'product_unit',
             'product_origin',
             'product_manufacturer',
+            'product_bidding_date',
             'product_available_date',
             'product_quantity',
             'product_ordered',

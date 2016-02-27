@@ -21,6 +21,7 @@ use yii\behaviors\AttributeBehavior;
  * @property mixed $product_origin
  * @property mixed $product_manufacturer
  * @property mixed $product_available_date
+ * @property mixed $product_bidding_date
  * @property mixed $product_quantity
  * @property mixed $product_ordered
  * @property mixed $product_create_date
@@ -87,6 +88,7 @@ class Product extends \yii\mongodb\ActiveRecord
             'product_unit',
             'product_origin',
             'product_manufacturer',
+            'product_bidding_date',
             'product_available_date',
             'product_quantity',
             'product_ordered',
@@ -107,7 +109,7 @@ class Product extends \yii\mongodb\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'product_name','product_desc','product_picture', 'product_model_number', 'product_price', 'product_unit_weight', 'product_unit', 'product_origin', 'product_manufacturer', 'product_available_date', 'product_quantity', 'product_ordered', 'product_create_date', 'product_create_user_id', 'product_last_update_date', 'product_last_update_user_id', 'product_status', 'product_category_fk', 'product_specification_fk', 'merchant_brand_fk'], 'safe']
+            [['product_id', 'product_name','product_desc','product_picture', 'product_model_number', 'product_price', 'product_unit_weight', 'product_unit', 'product_origin', 'product_manufacturer', 'product_bidding_date', 'product_available_date', 'product_quantity', 'product_ordered', 'product_create_date', 'product_create_user_id', 'product_last_update_date', 'product_last_update_user_id', 'product_status', 'product_category_fk', 'product_specification_fk', 'merchant_brand_fk'], 'safe']
         ];
     }
 
@@ -129,6 +131,7 @@ class Product extends \yii\mongodb\ActiveRecord
             'product_origin' => Yii::t('app', 'Product Origin'),
             'product_manufacturer' => Yii::t('app', 'Product Manufacturer'),
             'product_available_date' => Yii::t('app', 'Product Available Date'),
+            'product_bidding_date' => Yii::t('app', 'Product Bidding Deadline'),
             'product_quantity' => Yii::t('app', 'Product Quantity'),
             'product_ordered' => Yii::t('app', 'Product Ordered'),
             'product_create_date' => Yii::t('app', 'Product Create Date'),
