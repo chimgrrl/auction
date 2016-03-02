@@ -9,6 +9,8 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Create Product Category');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Product Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerCss('div.categoryOptionList > label { display: block; }');
 ?>
 <div class="product-category-create">
 
@@ -16,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'parentCategories' => $parentCategories
     ]) ?>
 
 </div>
