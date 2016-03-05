@@ -6,11 +6,13 @@ use yii\helpers\Html;
 /* @var $model common\models\ProductCategory */
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Product Category',
-]) . ' ' . $model->_id;
+        'modelClass' => 'Product Category',
+    ]) . ' ' . $model->_id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Product Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->_id, 'url' => ['view', 'id' => (string)$model->_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+
+$this->registerCss('div.categoryOptionList > label { display: block; }');
 ?>
 <div class="product-category-update">
 
@@ -18,6 +20,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <?= $this->render('_form', [
         'model' => $model,
+        'parentCategories' => $parentCategories
     ]) ?>
 
 </div>
