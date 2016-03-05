@@ -9,7 +9,7 @@ return [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=auctionDB',
             'username' => 'root',
-            'password' => '123456',
+            'password' => 'jempogi123',
             'charset' => 'utf8',
         ],
         'mongodb' => [

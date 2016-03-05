@@ -12,12 +12,8 @@ use yii\web\View;
 $this->registerJsFile('@web/js/jquery.highCheckTree.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerCssFile("@web/css/highCheckTree.css");
 
-$catNumStr = '';
 
-if(isset($model->productCategory))
-{
-	$catNumStr = "data: {evalType: 'catId', evalVal:'".$model->productCategory->product_category_id."'}";
-}
+$catNumStr = "data: {evalType: 'catId', productId:'".$model->product_id."'}";
 
 $chkbxTreeJs = "
 	var catData = [];
@@ -43,6 +39,7 @@ $chkbxTreeJs = "
 	
 	function setupTree()
 	{
+
 		$('#tree-container').highCheckTree({
 			data: catData,
             onCheck: function(checkbox){

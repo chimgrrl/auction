@@ -2,18 +2,20 @@
 
 namespace backend\controllers;
 
-use Yii;
+use common\models\Product;
 use common\models\ProductCategory;
 use common\models\ProductCategorySearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProductCategoryController implements the CRUD actions for ProductCategory model.
  */
 class ProductCategoryController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -61,12 +63,14 @@ class ProductCategoryController extends Controller
     public function actionCreate()
     {
         $model = new ProductCategory();
+        $parentCategories = ProductCategory::findAll(['product_category_parent_id' => '']);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => (string)$model->_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'parentCategories' => $parentCategories
             ]);
         }
     }
@@ -80,12 +84,18 @@ class ProductCategoryController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $parentCategories =
+            ProductCategory::find()
+                ->where(['product_category_parent_id' => ''])
+                ->andWhere(['NOT', 'product_category_id', $model->product_category_id])
+                ->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => (string)$model->_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'parentCategories' => $parentCategories
             ]);
         }
     }
@@ -118,57 +128,109 @@ class ProductCategoryController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-	
-	public function actionGetCategoryTree()
-	{
-		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$getParams = Yii::$app->request->get();	
-		
-		
-		$searchCri = array('product_category_parent_id' => '');
-		$allCategories = ProductCategory::findAll($searchCri);
-		$jsonData = array();
-		
-		foreach($allCategories as $catLvl1)
-		{
-			$currObj = array();
-			$checked = false;
-			if(!empty($getParams))
-			{
-				if((($getParams['evalType'] == 'catParentId') && ($getParams['evalVal'] == $catLvl1->product_category_id)) || (($getParams['evalType'] == 'catId') && ($getParams['evalVal'] == $catLvl1->product_category_id)))
-				{
-					$checked = true;
-				}
-			}
-			$currObj['item'] = array(
-				'id' => $catLvl1->product_category_id,
-				'label' => $catLvl1->product_category_name,
-				'checked' => $checked,
-			);
-			if(!empty($catLvl1->subcategories))
-			{
-				$subCats = $catLvl1->subcategories;
-				foreach($subCats as $catLvl2)
-				{
-					$checked2 = false;
-					if(!empty($getParams))
-					{
-						if((($getParams['evalType'] == 'catParentId') && ($getParams['evalVal'] == $catLvl2->product_category_id)) || (($getParams['evalType'] == 'catId') && ($getParams['evalVal'] == $catLvl2->product_category_id)))
-						{
-							$checked2 = true;
-						}
-					}
-					$currObj['children'][]['item'] = array(
-						'id' => $catLvl2->product_category_id,
-						'label' => $catLvl2->product_category_name,
-						'checked' => $checked2,
-					);
-				}
-			}
-			$jsonData[] = $currObj;
-		}
-		
-		return $jsonData;
-	}
+
+    public function actionGetCategoryTree()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $productCategoryKeys = $this->getProductCategoryKeys(Yii::$app->request->get('productId'));
+
+        $productCategories = ProductCategory::findAll(['product_category_parent_id' => '']);
+
+
+        return $this->buildCategoryTree($productCategoryKeys, $productCategories);
+
+    }
+
+    /**
+     * Get all categories associated on a product
+     *
+     * @param $productId
+     * @return array
+     */
+    private function getProductCategoryKeys($productId)
+    {
+        $productCategoryKeys = [];
+
+        if($productId == ''){
+            return $productCategoryKeys;
+        }
+
+        $productCategories = Product::findOne(['product_id' => $productId])->product_category_fk;
+
+        if (!empty($productCategories)) {
+            $productCategoryKeys = explode(',', $productCategories);
+        }
+
+        return $productCategoryKeys;
+    }
+
+    /**
+     * Build Category Tree
+     *
+     * @param array $productCategoryKeys
+     * @param object $productCategories
+     * @return array
+     */
+    private function buildCategoryTree($productCategoryKeys, $productCategories)
+    {
+        $categories = [];
+
+        foreach ($productCategories as $parentCategory) {
+
+            $category = [];
+
+            $category['item'] = [
+                'id' => $parentCategory->product_category_id,
+                'label' => $parentCategory->product_category_name,
+                'checked' => $this->isChecked($parentCategory->product_category_id, $productCategoryKeys)
+            ];
+
+            $category = $this->attachChildCategory($category, $productCategoryKeys, $parentCategory);
+
+            $categories[] = $category;
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Attach Child Category to Parent
+     *
+     * @param array $category
+     * @param array $productCategoryKeys
+     * @param object $parentCategory
+     * @return array
+     */
+    private function attachChildCategory($category, $productCategoryKeys, $parentCategory)
+    {
+        if (empty($parentCategory->subcategories)) {
+            return $category;
+        }
+
+        $childCategories = $parentCategory->subcategories;
+
+        foreach ($childCategories as $childCategory) {
+            $category['children'][]['item'] = [
+                'id' => $childCategory->product_category_id,
+                'label' => $childCategory->product_category_name,
+                'checked' => $this->isChecked($childCategory->product_category_id, $productCategoryKeys)
+            ];
+        }
+
+        return $category;
+
+    }
+
+    /**
+     * Helper to check category if checked
+     *
+     * @param string $productCategoryId
+     * @param array $productCategoryKeys
+     * @return bool
+     */
+    private function isChecked($productCategoryId, $productCategoryKeys)
+    {
+        return in_array($productCategoryId, $productCategoryKeys) ?: false;
+    }
 }
