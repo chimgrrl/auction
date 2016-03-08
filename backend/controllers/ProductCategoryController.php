@@ -152,6 +152,10 @@ class ProductCategoryController extends Controller
     {
         $productCategoryKeys = [];
 
+        if($productId == ''){
+            return $productCategoryKeys;
+        }
+
         $productCategories = Product::findOne(['product_id' => $productId])->product_category_fk;
 
         if (!empty($productCategories)) {

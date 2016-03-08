@@ -39,7 +39,7 @@ $chkbxTreeJs = "
 	
 	function setupTree()
 	{
-	console.log(catData);
+
 		$('#tree-container').highCheckTree({
 			data: catData,
             onCheck: function(checkbox){
