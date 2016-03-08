@@ -171,4 +171,9 @@ class Product extends \yii\mongodb\ActiveRecord
 	{
 		return $this->hasOne(MerchantBrand::className(),['merchant_brand_id' => 'merchant_brand_fk']);
 	}
+
+	public function getProductSpecification()
+	{
+		return $this->hasOne(ProductSpecification::className(),['product_specification_id' => 'product_specification_fk']);
+	}
 }

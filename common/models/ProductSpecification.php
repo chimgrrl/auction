@@ -107,4 +107,26 @@ class ProductSpecification extends \yii\mongodb\ActiveRecord
             'merchant_brand_fk' => Yii::t('app', 'Merchant Brand Fk'),
         ];
     }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if($insert){
+                $this->product_specification_id = Yii::$app->UtilHelper->randString(10);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getSubspecifications()
+    {
+        return $this->hasMany(ProductSpecification::className(),['product_specification_parent_id' => 'product_specification_id']);
+    }
+
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(),['product_specification_fk' => 'product_specification_id']);
+    }
 }
