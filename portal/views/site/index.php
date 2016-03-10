@@ -173,7 +173,7 @@ $this->title = 'iDeal';
 							<div class="col-lg-4 col-sm-6 product-item fontss">
    <div class="photo-wrapper">
       <!-- item photo  -->
-      <?= Html::img($currRecProduct->getUploadedFileUrl('product_picture'),['class' => 'cover-img']) ?>	
+      <?= Html::img($currRecProduct->getUploadedFileUrl('product_picture'),['class' => 'cover-img']) ?>
    </div>
    <div class="item-name fontsn" title="<?= $currRecProduct->product_name?>"><?= $currRecProduct->product_name?></div>
    <div class="item-counter-type item-ui-a">
@@ -207,7 +207,7 @@ $this->title = 'iDeal';
       </div>
    </div>
 </div>
-						<?php	
+						<?php
 						}
 						?>
 	    			</div>
@@ -224,9 +224,9 @@ $this->title = 'iDeal';
 					<?php
 						foreach($allCats as $currCat)
 						{?>
-						<div class="category-item1 category-item">	
+						<div class="category-item1 category-item">
 							<h2 class="fTitle category-list-title" style="background-color:<?=sprintf('#%06X', mt_rand(0, 0xFFFFFF)) ?>"><?= Html::img($currCat->getUploadedFileUrl('product_category_icon')) ?><span><?= $currCat->product_category_name ?></span><a><button type="button" class="btn btn-default fNormal">more</button></a></h2>
-							
+
 							<div class="row">
 							<?php
 							$allProducts = array_slice($currCat->products,-4);
@@ -234,7 +234,7 @@ $this->title = 'iDeal';
 							{
 							?>
 							<div class="col-lg-3 col-sm-4 col-xs-6 product-item fontss">
-							   <?= Html::a("<div class=\"photo-wrapper\">".Html::img($currProduct->getUploadedFileUrl('product_picture'),['class' => 'cover-img'])."</div>",['site/product','pid'=>$currProduct->product_id]) ?>							   
+							   <?= Html::a("<div class=\"photo-wrapper\">".Html::img($currProduct->getUploadedFileUrl('product_picture'),['class' => 'cover-img'])."</div>",['site/product','pid'=>$currProduct->product_id]) ?>
 							   <div class="item-name fontsn" title="<?= $currProduct->product_name?>"><?= $currProduct->product_name?></div>
 							   <div class="item-price fonts0"><span class="item-price1 text-right fontsl"><?= $currProduct->product_price?></span><span class="item-price2 text-left fontsn"><?= $currProduct->product_price?></span></div>
 							   <div class="item-ui-b text-center">
@@ -249,7 +249,7 @@ $this->title = 'iDeal';
 							}
 							?>
 							</div>
-						</div>	
+						</div>
 					<?php	}
 					?>
 					<!-- end category level looping -->

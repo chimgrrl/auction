@@ -25,7 +25,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-	public $new_password;
+    public $new_password;
 
     /**
      * @inheritdoc
@@ -51,6 +51,21 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            [
+                [
+                    'email',
+                    'username',
+                    'new_password'
+                ],
+                'required'
+            ],
+            ['email', 'email'],
+            [
+                ['email', 'username'],
+                'unique'
+            ],
+
+            [['username', 'email'],'trim'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
@@ -113,7 +128,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
@@ -133,8 +148,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->auth_key;
     }
-	
-	public function getMerchantBrand()
+
+    public function getMerchantBrand()
     {
         return $this->hasOne(MerchantBrand::className(), ['user_fk' => 'id']);
     }
