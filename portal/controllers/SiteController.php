@@ -28,29 +28,29 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-		/* 
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
-                'rules' => [
-                    [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
+            /*
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'signup'],
+                    'rules' => [
+                        [
+                            'actions' => ['signup'],
+                            'allow' => true,
+                            'roles' => ['?'],
+                        ],
+                        [
+                            'actions' => ['logout'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
                     ],
                 ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ], */
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'logout' => ['post'],
+                    ],
+                ], */
         ];
     }
 
@@ -78,29 +78,31 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $allCategories = ProductCategory::find()->with('products')->all();
-		$allProducts = Product::find()->all();
-		$recProducts = array();
-		
-		for($i=0;$i<3;$i++)
-		{
-			$currRand = rand(0,count($allProducts)-1);
-			$recProducts[] = $allProducts[$currRand];
-		}
-		return $this->render('index',[
-			'allCats' => $allCategories,
-			'recProducts' => $recProducts,
-		]);
+        $allProducts = Product::find()->all();
+        $recProducts = array();
+
+        for ($i = 0; $i < 3; $i++) {
+            $currRand = rand(0, count($allProducts) - 1);
+            $recProducts[] = $allProducts[$currRand];
+        }
+        return $this->render('index', [
+            'allCats' => $allCategories,
+            'recProducts' => $recProducts,
+        ]);
     }
-	
-	public function actionProduct()
+
+    public function actionProduct()
     {
         $productId = Yii::$app->request->get('pid');
-		
-		$product = Product::find()->where(['product_id'=>$productId])->with('productCategory')->one();
-		
-		return $this->render('product',[
-			'product' => $product,
-		]);
+
+        $product = Product::find()->where(['product_id' => $productId])->with('productCategory')->one();
+
+        $biddingDate = (!empty($product->product_bidding_date)) ? $this->convertDateFormat($product->product_bidding_date) : '';
+
+        return $this->render('product', [
+            'product' => $product,
+            'biddingDate' => $biddingDate
+        ]);
     }
 
     /**
@@ -146,7 +148,8 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                Yii::$app->session->setFlash('success',
+                    'Thank you for contacting us. We will respond to you as soon as possible.');
             } else {
                 Yii::$app->session->setFlash('error', 'There was an error sending email.');
             }
@@ -177,15 +180,15 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new Membership();
-		$user = new User();
+        $user = new User();
         if ($model->load(Yii::$app->request->post())) {
-			$postReq = Yii::$app->request->post();
-			$user->username = $postReq['User']['username'];
-			$user->email = $postReq['User']['email'];
-			$user->new_password = $postReq['User']['new_password'];
-			$user->setPassword();
-			$user->save();
-			$model->membership_login_id = $user->id;
+            $postReq = Yii::$app->request->post();
+            $user->username = $postReq['User']['username'];
+            $user->email = $postReq['User']['email'];
+            $user->new_password = $postReq['User']['new_password'];
+            $user->setPassword();
+            $user->save();
+            $model->membership_login_id = $user->id;
             if ($model->save()) {
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
@@ -246,5 +249,19 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Convert Date format
+     *
+     * @param $date
+     * @param string $format
+     * @return bool|string
+     */
+    private function convertDateFormat($date, $format = 'Y/m/d')
+    {
+        $date = str_replace('/', '-', $date);
+
+        return date($format, strtotime($date));
     }
 }
