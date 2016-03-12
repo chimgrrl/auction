@@ -234,7 +234,7 @@ $this->title = 'iDeal';
 							{
 							?>
 							<div class="col-lg-3 col-sm-4 col-xs-6 product-item fontss">
-							   <?= Html::a("<div class=\"photo-wrapper\">".Html::img($currProduct->getUploadedFileUrl('product_picture'),['class' => 'cover-img'])."</div>",['site/product','pid'=>$currProduct->product_id]) ?>
+							   <?= Html::a("<div class=\"photo-wrapper\">".Html::img($currProduct->getUploadedFileUrl('product_picture'),['class' => 'cover-img'])."</div>",['site/product','pid'=>$currProduct->product_id,'cid' => $currCat->product_category_id]) ?>
 							   <div class="item-name fontsn" title="<?= $currProduct->product_name?>"><?= $currProduct->product_name?></div>
 							   <div class="item-price fonts0"><span class="item-price1 text-right fontsl"><?= $currProduct->product_price?></span><span class="item-price2 text-left fontsn"><?= $currProduct->product_price?></span></div>
 							   <div class="item-ui-b text-center">

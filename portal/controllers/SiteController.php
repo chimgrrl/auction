@@ -93,15 +93,20 @@ class SiteController extends Controller
 
     public function actionProduct()
     {
-        $productId = Yii::$app->request->get('pid');
+        $product = Product::find()->where(['product_id' => Yii::$app->request->get('pid')])
+            ->with('productCategory')
+            ->one();
 
-        $product = Product::find()->where(['product_id' => $productId])->with('productCategory')->one();
+        $productCategory = ProductCategory::findOne(['product_category_id' => Yii::$app->request->get('cid')])
+            ->product_category_name;
 
-        $biddingDate = (!empty($product->product_bidding_date)) ? $this->convertDateFormat($product->product_bidding_date) : '';
+        $biddingDate = (!empty($product->product_bidding_date)) ?
+            $this->convertDateFormat($product->product_bidding_date) : '';
 
         return $this->render('product', [
             'product' => $product,
-            'biddingDate' => $biddingDate
+            'biddingDate' => $biddingDate,
+            'productCategory' => $productCategory
         ]);
     }
 
