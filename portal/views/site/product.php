@@ -38,7 +38,7 @@ $('#getting-started').countdown('" . $biddingDate . "', function (event) {
         <div class="container">
 
             <div class="nav-category"><?= Html::a('Home', '@web') ?> ><a
-                    href="#"><? //$product->productCategory->product_category_name ?></a></div>
+                    href="#"><?= $productCategory ?></a></div>
 
             <div class="product-container">
                 <div class="row">
