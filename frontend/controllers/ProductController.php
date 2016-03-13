@@ -35,11 +35,7 @@ class ProductController extends Controller
     {
         $currUser = Yii::$app->user->getIdentity();
 		
-		$currMb = MerchantBrand::find()->where(['merchant_brand_id'=>$currUser->username])->one();
-				
-		$mbFk = $currMb->_id;
-		
-		$query = Product::find()->where(['merchant_brand_fk' => new \MongoId($mbFk)]);
+		$query = Product::find()->where(['merchant_brand_fk' => $currUser->username]);
 		
 		$searchModel = new ProductSearch();
         $dataProvider = new ActiveDataProvider([
@@ -74,14 +70,9 @@ class ProductController extends Controller
      */
     public function actionCreate()
     {
-        $currUser = Yii::$app->user->getIdentity();
-		
-		$currMb = MerchantBrand::find()->where(['merchant_brand_id'=>$currUser->username])->one();
-				
-		$mbFk = $currMb->_id;
-		
-		$model = new Product();
-		$model->merchant_brand_fk = $mbFk;
+        $model = new Product();
+
+        $model->merchant_brand_fk = Yii::$app->user->getIdentity()->username;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => (string)$model->_id]);

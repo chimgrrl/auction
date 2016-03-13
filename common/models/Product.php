@@ -149,10 +149,6 @@ class Product extends \yii\mongodb\ActiveRecord
 	{
 		if (parent::beforeSave($insert)) {
 			if($insert){
-				if(!empty($this->merchant_brand_fk))
-				{
-					$this->merchant_brand_fk = new \MongoId($this->merchant_brand_fk);
-				}
 				$this->product_id = Yii::$app->UtilHelper->randString(10);
 				$this->product_status = 1;
 			}
