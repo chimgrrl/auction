@@ -45,8 +45,8 @@ AppAsset::register($this);
     } else {
 $menuItems[] = ['label' => 'Membership', 'url' => ['/membership/mb-memberships']];
 		$menuItems[] = ['label' => 'Products', 'url' => ['/product/index']];
-		//$menuItems[] = ['label' => 'Product Categories', 'url' => ['/product-category/index']];
-		//$menuItems[] = ['label' => 'Product Specifications', 'url' => ['/product-specification/index']];
+		$menuItems[] = ['label' => 'Product Categories', 'url' => ['/product-category/index']];
+		$menuItems[] = ['label' => 'Product Specifications', 'url' => ['/product-specification/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
             'url' => ['/site/logout'],
