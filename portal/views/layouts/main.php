@@ -14,6 +14,7 @@ use kartik\icons\Icon;
 
 AppAsset::register($this);
 
+$this->registerJsFile('@web/js/bootstrap.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/main.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/modernizr-2.7.1.min.js',['position'=>View::POS_HEAD]);
 $this->registerCssFile("@web/css/normalize.css");
