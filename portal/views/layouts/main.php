@@ -42,7 +42,7 @@ Icon::map($this, Icon::FA);
                         <?php if (Yii::$app->user->isGuest) : ?>
 
                             <li><?= Html::a('<i class="fa fa-user"></i> Login', ['/auth/login']) ?></li>
-                            <li><?= Html::a('<i class="fa fa-bolt"></i> Signup', ['/site/signup']) ?></li>
+                            <li><?= Html::a('<i class="fa fa-bolt"></i> Signup', ['/registration/agreement']) ?></li>
 
                         <?php else: ?>
                             <li>
@@ -146,14 +146,18 @@ Icon::map($this, Icon::FA);
 
 <?= $content ?>
 
-<div id="footer">
+<div class="footer">
     <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-12 text-center h6">© 2015 iDeal. All Rights Reserved.</div>
-        </div>
-    </div>
-</div>
+        <div class="row clearfix">
+            <div class="text-right fright">
+                <li><img src="img/ui/credits.png"/><span>65535 Credits</span></li>
+                <li><img src="img/ui/addcredits.png"/><span>Add Credits</span></li>
+                <li><img src="img/ui/notify.png"/><span>Notification</span></li>
+            </div>
+            <div class="fleft">© 2015 iDeal. All Rights Reserved.</div>
 
+        </div>
+    </div
 
 <?php $this->endBody() ?>
 </body>
