@@ -42,17 +42,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $allCategories = ProductCategory::find()->with('products')->all();
-        $allProducts = Product::find()->all();
-        $recProducts = array();
+        $categories = ProductCategory::find()->with('products')->all();
+        $recommendedProducts = Product::find()->where(['product_bidding_date' => ''])->all();
 
-        for ($i = 0; $i < 3; $i++) {
-            $currRand = rand(0, count($allProducts) - 1);
-            $recProducts[] = $allProducts[$currRand];
-        }
         return $this->render('index', [
-            'allCats' => $allCategories,
-            'recProducts' => $recProducts,
+            'recommendedProducts' => $recommendedProducts,
+            'categories' => $categories
         ]);
     }
 
@@ -74,7 +69,6 @@ class SiteController extends Controller
             'productCategory' => $productCategory
         ]);
     }
-
 
 
     /**
@@ -109,36 +103,6 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    public function actionSignup()
-    {
-        $model = new Membership();
-        $user = new User();
-        if ($model->load(Yii::$app->request->post())) {
-            $postReq = Yii::$app->request->post();
-            $user->username = $postReq['User']['username'];
-            $user->email = $postReq['User']['email'];
-            $user->new_password = $postReq['User']['new_password'];
-            $user->setPassword();
-            $user->save();
-            $model->membership_login_id = $user->id;
-            if ($model->save()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-            'user' => $user,
-        ]);
     }
 
     /**
@@ -190,17 +154,5 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Convert Date format
-     *
-     * @param $date
-     * @param string $format
-     * @return bool|string
-     */
-    private function convertDateFormat($date, $format = 'Y/m/d')
-    {
-        $date = str_replace('/', '-', $date);
 
-        return date($format, strtotime($date));
-    }
 }

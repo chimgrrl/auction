@@ -65,6 +65,8 @@ class ProductCategoryController extends Controller
         $model = new ProductCategory();
         $parentCategories = ProductCategory::findAll(['product_category_parent_id' => '']);
 
+        $model->merchant_brand_fk = '';
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => (string)$model->_id]);
         } else {
@@ -152,7 +154,7 @@ class ProductCategoryController extends Controller
     {
         $productCategoryKeys = [];
 
-        if($productId == ''){
+        if ($productId == '') {
             return $productCategoryKeys;
         }
 

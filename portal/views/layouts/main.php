@@ -40,25 +40,24 @@ Icon::map($this, Icon::FA);
                     <ul class="nav navbar-nav navbar-left">
 
                         <?php if (Yii::$app->user->isGuest) : ?>
-
                             <li><?= Html::a('<i class="fa fa-user"></i> Login', ['/auth/login']) ?></li>
-                            <li><?= Html::a('<i class="fa fa-bolt"></i> Signup', ['/registration/agreement']) ?></li>
-
+                            <li><?= Html::a('<i class="fa fa-sign-out"></i> Sign Up', ['/registration/agreement']) ?></li>
                         <?php else: ?>
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false"><span
+                                        class="caret"></span><?php echo Yii::$app->user->identity->username; ?></a>
+                                <ul class="dropdown-menu">
+                                    <li><?= Html::a('<i class="fa fa-bolt"></i> My Profile', ['/account/profile']) ?></li>
+                                    <li><?= Html::a('<i class="fa fa-bolt"></i> Logout', ['/auth/logout']) ?></li>
+                                </ul>
+                            </li>
+
                             <li>
-                                <?= Html::a('<i class="fa fa-bolt"></i> Logout', ['/auth/logout']) ?>
+
                             </li>
                         <?php endif; ?>
-
-                        <li><a href="#"><i class="fa fa-shopping-cart"></i>Shopping Cart</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false"><span class="caret"></span>ENG</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">ZH-HK</a></li>
-                                <!-- <li><a href="#">ENG</a></li> -->
-                            </ul>
-                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#"><?= Html::img('@web/img/ui/fb_share.png') ?></a></li>
@@ -150,14 +149,17 @@ Icon::map($this, Icon::FA);
     <div class="container">
         <div class="row clearfix">
             <div class="text-right fright">
-                <li><img src="img/ui/credits.png"/><span>65535 Credits</span></li>
-                <li><img src="img/ui/addcredits.png"/><span>Add Credits</span></li>
-                <li><img src="img/ui/notify.png"/><span>Notification</span></li>
+                <ul>
+                    <li><img src="img/ui/credits.png"/><span>65535 Credits</span></li>
+                    <li><img src="img/ui/addcredits.png"/><span>Add Credits</span></li>
+                    <li><img src="img/ui/notify.png"/><span>Notification</span></li>
+                </ul>
             </div>
             <div class="fleft">© 2015 iDeal. All Rights Reserved.</div>
 
         </div>
-    </div
+    </div>
+</div>
 
 <?php $this->endBody() ?>
 </body>

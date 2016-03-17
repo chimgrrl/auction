@@ -10,8 +10,9 @@ $this->title = 'iDeal - Registration Agreement';
     <section class="sections">
         <div class="container">
 
-            <div class="nav-category"><?= Html::a('Home', '@web') ?> ><a
-                    href="#">Registration Agreement</a></div>
+            <div class="nav-category"><?= Html::a('Home', '@web') ?> >
+                Registration Agreement
+            </div>
 
             <div class="row">
                 <h2 class="col-sm-12 col-xs-12 text-center">Terms and Condition</h2>

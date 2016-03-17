@@ -1,5 +1,5 @@
 <?php
-namespace portal\controllers;
+namespace frontend\controllers;
 
 use common\models\LoginForm;
 use Yii;
@@ -15,18 +15,26 @@ class AuthController extends Controller
      */
     public function actionLogin()
     {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = new LoginForm();
 
         $post = Yii::$app->request->post();
 
         if (($post) && $model->loginByRole($post['LoginForm'])) {
-            return $this->goHome();
+
+            Yii::$app->getSession()->setFlash(
+                'success', '<h1>Welcome, user ' . $model->username . '</h1>'
+            );
+
+            return $this->redirect(array('/product/index'));
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-
     }
 
     /**

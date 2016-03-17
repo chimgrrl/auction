@@ -11,6 +11,7 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $role;
     public $rememberMe = true;
 
     private $_user;
@@ -22,11 +23,8 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
             [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
     }
@@ -60,6 +58,45 @@ class LoginForm extends Model
         } else {
             return false;
         }
+    }
+
+
+    /**
+     * @param array $payload
+     * @return bool|null
+     */
+    public function loginByRole(array $payload = [])
+    {
+        $user = new User();
+
+        $user = $user->findOne([
+            'username' => $payload['username'],
+            'status' => $user::STATUS_ACTIVE,
+            'role' => $payload['role']
+        ]);
+
+        if ($this->isCredentialValid($user, $payload['password'])) {
+            return Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $user
+     * @param $password
+     * @return null
+     */
+    private function isCredentialValid($user, $password)
+    {
+        if (!$user || !$user->validatePassword($password)) {
+            $this->addError('username', '');
+            $this->addError('password', 'Invalid Credentials.');
+
+            return null;
+        }
+
+        return $user;
     }
 
     /**

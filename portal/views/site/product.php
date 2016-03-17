@@ -7,7 +7,6 @@ use yii\web\View;
 $this->title = 'iDeal - ' . $product->product_name;
 
 $this->registerJsFile('@web/js/jquery.countdown.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/js/module/product.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerCssFile("@web/css/module/product/countdown.css");
 $this->registerJs("
 

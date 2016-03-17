@@ -45,6 +45,26 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
+        return [
+            'id',
+            'username',
+            'auth_key',
+            'password_hash',
+            'password_reset_token',
+            'email',
+            'status',
+            'created_at',
+            'updated_at',
+            'role'
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -65,7 +85,7 @@ class User extends ActiveRecord implements IdentityInterface
                 'unique'
             ],
 
-            [['username', 'email'],'trim'],
+            [['username', 'email'], 'trim'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
@@ -205,5 +225,36 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Stores new User
+     *
+     * @param $username
+     * @param $password
+     * @param $email
+     * @param $role
+     * @param bool $authKey
+     *
+     * @return $this|null
+     */
+    public function store($username, $password, $email, $role, $authKey = false)
+    {
+        $this->username = $username;
+        $this->email = $email;
+        $this->new_password = $password;
+        $this->role = $role;
+
+        $this->setPassword();
+
+        if ($authKey) {
+            $this->generateAuthKey();
+        }
+
+        if ($this->save()) {
+            return $this;
+        }
+
+        return null;
     }
 }

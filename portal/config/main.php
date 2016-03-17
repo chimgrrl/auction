@@ -16,6 +16,9 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
         ],
+		'helper' => [
+			'class' => 'api\services\AuctionHelpers'
+		],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
