@@ -7,8 +7,6 @@ use yii\web\View;
 
 AppAsset::register($this);
 
-$this->registerCssFile("@web/css/normalize.css");
-$this->registerCssFile("@web/css/main.css");
 $this->registerJsFile('@web/js/bootstrap.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/main.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/modernizr-2.7.1.min.js', ['position' => View::POS_HEAD]);
@@ -19,8 +17,8 @@ Icon::map($this, Icon::FA);
 
 <?php $this->beginPage() ?>
 
-<!DOCTYPE html>
-<html lang="<?php echo Yii::$app->language ?>">
+    <!DOCTYPE html>
+    <html lang="<?php echo Yii::$app->language ?>">
     <head>
         <meta charset="<?php echo Yii::$app->charset ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,22 +29,22 @@ Icon::map($this, Icon::FA);
 
     <body class="loading">
 
-        <?php $this->beginBody() ?>
+    <?php $this->beginBody() ?>
 
-        <div id="preload"></div>
+    <div id="preload"></div>
 
-        <div id="header">
-            <?php echo $this->render('partials/header', ['HTML' => Html::class, 'ICON' => Icon::class]); ?>
-            <?php echo $this->render('partials/navigation-search', ['HTML' => Html::class]); ?>
-            <?php echo $this->render('partials/navigation'); ?>
-        </div>
+    <div id="header">
+        <?php echo $this->render('partials/header', ['HTML' => Html::class, 'ICON' => Icon::class]); ?>
+        <?php echo $this->render('partials/navigation-search', ['HTML' => Html::class]); ?>
+        <?php echo $this->render('partials/navigation'); ?>
+    </div>
 
-        <?php echo $content ?>
+    <?php echo $content ?>
 
-        <?php echo $this->render('partials/footer'); ?>
+    <?php echo $this->render('partials/footer', ['HTML' => Html::class]); ?>
 
-        <?php $this->endBody() ?>
+    <?php $this->endBody() ?>
     </body>
-</html>
+    </html>
 
 <?php $this->endPage() ?>

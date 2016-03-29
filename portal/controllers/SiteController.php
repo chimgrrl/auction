@@ -43,7 +43,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $categories = ProductCategory::find()->with('products')->all();
-        $recommendedProducts = Product::find()->where(['product_bidding_date' => ''])->all();
+        $recommendedProducts = Product::find()
+            ->andWhere(['NOT', 'product_bidding_date', ''])
+            ->all();
 
         return $this->render('index', [
             'recommendedProducts' => $recommendedProducts,

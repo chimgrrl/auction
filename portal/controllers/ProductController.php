@@ -50,4 +50,16 @@ class ProductController extends BaseController
         ]);
     }
 
+
+    /**
+     * Logs out the current user.
+     *
+     * @return mixed
+     */
+    public function actionBid()
+    {
+        return $this->render('bid', [
+        ]);
+    }
+
 }
