@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\AttributeBehavior;
 use yii\web\UploadedFile;
+
 /**
  * This is the model class for collection "membership".
  *
@@ -32,7 +33,14 @@ use yii\web\UploadedFile;
  */
 class Membership extends \yii\mongodb\ActiveRecord
 {
-	public $upload_file;
+
+    /**
+     * @var string
+     */
+    public $captcha;
+
+    public $upload_file;
+
     /**
      * @inheritdoc
      */
@@ -40,27 +48,27 @@ class Membership extends \yii\mongodb\ActiveRecord
     {
         return ['auctionDB', 'membership'];
     }
-	
-	public function behaviors()
+
+    public function behaviors()
     {
-		return [
-			[
-				'class' => TimestampBehavior::className(),
-				'createdAtAttribute' => 'membership_create_date',
-				'updatedAtAttribute' => 'membership_last_update_date',
-			],					
-			[
-				'class' => BlameableBehavior::className(),
-				'createdByAttribute' => 'membership_create_user_id',
-				'updatedByAttribute' => 'membership_last_update_user_id',
-			],
-			[
-				'class' => AttributeBehavior::className(),
-				'attributes' => ['membership_status'],
-				'value' => '1',
-			],
-		];
-	}
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'membership_create_date',
+                'updatedAtAttribute' => 'membership_last_update_date',
+            ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'membership_create_user_id',
+                'updatedByAttribute' => 'membership_last_update_user_id',
+            ],
+            [
+                'class' => AttributeBehavior::className(),
+                'attributes' => ['membership_status'],
+                'value' => '1',
+            ],
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -90,6 +98,8 @@ class Membership extends \yii\mongodb\ActiveRecord
             'membership_credits_points',
             'membership_profile_image',
             'merchant_brand_fk',
+            'interested_product_categories_fk',
+            'captcha	'
         ];
     }
 
@@ -99,13 +109,42 @@ class Membership extends \yii\mongodb\ActiveRecord
     public function rules()
     {
         return [
-			[['membership_login_id'],'required'],
-			['upload_file', 'image', 'extensions' => 'png',
-				'minWidth' => 128, 'maxWidth' => 128,
-				'minHeight' => 128, 'maxHeight' => 128,
-			],
-			
-            [['membership_unique_id', 'membership_login_id', 'membership_first_name', 'membership_last_name', 'membership_gender', 'membership_date_of_birth', 'membership_district', 'membership_address', 'membership_contact_telephone', 'membership_email_address', 'membership_current_points', 'membership_current_reputation', 'membership_date_of_joining', 'membership_status', 'membership_credits_points', 'membership_profile_image','membership_create_date','membership_last_update_date'], 'safe']
+            [['membership_contact_telephone', 'membership_login_id', 'membership_address'], 'required'],
+
+            [
+                'upload_file',
+                'image',
+                'extensions' => 'png',
+                'minWidth' => 128,
+                'maxWidth' => 128,
+                'minHeight' => 128,
+                'maxHeight' => 128,
+            ],
+
+            [
+                [
+                    'membership_unique_id',
+                    'membership_login_id',
+                    'membership_first_name',
+                    'membership_last_name',
+                    'membership_gender',
+                    'membership_date_of_birth',
+                    'membership_district',
+                    'membership_address',
+                    'membership_contact_telephone',
+                    'membership_email_address',
+                    'membership_current_points',
+                    'membership_current_reputation',
+                    'membership_date_of_joining',
+                    'membership_status',
+                    'membership_credits_points',
+                    'membership_profile_image',
+                    'membership_create_date',
+                    'membership_last_update_date',
+                    'interested_product_categories_fk'
+                ],
+                'safe'
+            ]
         ];
     }
 
@@ -137,38 +176,58 @@ class Membership extends \yii\mongodb\ActiveRecord
             'membership_create_user_id' => 'Membership Create User',
             'membership_last_update_date' => 'Membership Last Update Date',
             'membership_last_update_user_id' => 'Membership Last Update User',
+            'interested_product_categories_fk' => 'Interested Product Categories'
         ];
     }
-	
-	public function getMerchantBrand()
+
+    public function getMerchantBrand()
     {
-		return $this->hasOne(MerchantBrand::className(),['_id' => 'merchant_brand_fk']);
-	}
-	
-	public function uploadFile() {
-		// get the uploaded file instance
-		$image = UploadedFile::getInstance($this, 'upload_file');
+        return $this->hasOne(MerchantBrand::className(), ['_id' => 'merchant_brand_fk']);
+    }
 
-		// if no image was uploaded abort the upload
-		if (empty($image)) {
-			return false;
-		}
+    public function uploadFile()
+    {
+        // get the uploaded file instance
+        $image = UploadedFile::getInstance($this, 'upload_file');
 
-		// generate random name for the file
-		
-		$this->membership_profile_image = 'membership_profile_'.time(). '.' . $image->extension;
-		
+        // if no image was uploaded abort the upload
+        if (empty($image)) {
+            return false;
+        }
 
-		// the uploaded image instance
-		return $image;
-	}
-	
-	public function getUploadedFile() {
+        // generate random name for the file
+
+        $this->membership_profile_image = 'membership_profile_' . time() . '.' . $image->extension;
+
+
+        // the uploaded image instance
+        return $image;
+    }
+
+    public function getUploadedFile()
+    {
         // return a default image placeholder if your source avatar is not found
-		
-		$pic = isset($this->membership_profile_image) ? $this->membership_profile_image : 'default_mobile.png';
-		
-        
-        return Yii::$app->params['fileUpload']. $pic;
+
+        $pic = isset($this->membership_profile_image) ? $this->membership_profile_image : 'default_mobile.png';
+
+
+        return Yii::$app->params['fileUpload'] . $pic;
+    }
+
+    /**
+     * Stores new Member;
+     *
+     * @param $member
+     * @return $this|null
+     */
+    public function store($member)
+    {
+        $this->load($member);
+
+        if ($this->save()) {
+            return $this;
+        }
+
+        return null;
     }
 }

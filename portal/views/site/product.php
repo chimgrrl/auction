@@ -7,7 +7,6 @@ use yii\web\View;
 $this->title = 'iDeal - ' . $product->product_name;
 
 $this->registerJsFile('@web/js/jquery.countdown.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/js/module/product.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerCssFile("@web/css/module/product/countdown.css");
 $this->registerJs("
 
@@ -43,22 +42,30 @@ $('#getting-started').countdown('" . $biddingDate . "', function (event) {
             <div class="product-container">
                 <div class="row">
                     <div class="col-md-6 col-sm-5">
-                        <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                        <div data-ride="carousel" class="carousel slide" id="product-carousel">
                             <div class="carousel-list">
-                                <!-- Wrapper for slides -->
-                                <div class="carousel-inner" role="listbox">
+                                <div role="listbox" class="carousel-inner">
+                                    <div class="item">
+                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                    </div>
                                     <div class="item active">
                                         <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
                                     </div>
-
-
+                                    <div class="item">
+                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                    </div>
                                 </div>
-                                <!-- Left and right controls -->
-                                <a class="left carousel-control" href="#product-carousel" role="button"
-                                   data-slide="prev"><i class="fa fa-angle-left"></i><span
-                                        class="sr-only">Previous</span></a>
-                                <a class="right carousel-control" href="#product-carousel" role="button"
-                                   data-slide="next"><i class="fa fa-angle-right"></i><span class="sr-only">Next</span></a>
+
+                                <a data-slide="prev" role="button" href="#product-carousel" class="left carousel-control"><i class="fa fa-angle-left"></i><span class="sr-only">Previous</span></a>
+                                <a data-slide="next" role="button" href="#product-carousel" class="right carousel-control"><i class="fa fa-angle-right"></i><span class="sr-only">Next</span></a>
+                            </div>
+                            <!-- Indicators -->
+                            <div class="indicators-wrapper">
+                                <ol class="carousel-indicators">
+                                    <li class="" data-slide-to="0" data-target="#product-carousel"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                    <li data-slide-to="1" data-target="#product-carousel" class="active"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                    <li data-slide-to="2" data-target="#product-carousel" class=""> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                </ol>
                             </div>
                         </div>
                     </div>

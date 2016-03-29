@@ -63,26 +63,19 @@ class SiteController extends Controller
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
-            //return $this->redirect('/merchant-brand/index');
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $currUser = Yii::$app->user->getIdentity();
-			if($currUser->username == 'admin')
-			{
-				return $this->redirect(array('/merchant-brand/index'));
-			}else{
-				Yii::$app->getSession()->setFlash(
-					'success','<h1>Welcome, user '.$model->username.'</h1>'
-				);
-				return $this->redirect(Yii::$app->getUrlManager()->hostInfo.'/auction/frontend/web/product/index');
-			}
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+
+        $post = Yii::$app->request->post();
+
+        if (($post) && $model->loginByRole($post['LoginForm'])) {
+            return $this->redirect(array('/merchant-brand/index'));
         }
+        return $this->render('login', [
+            'model' => $model,
+        ]);
+
     }
 
     public function actionLogout()

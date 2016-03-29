@@ -1,58 +1,23 @@
 <?php
 namespace portal\controllers;
 
-use Yii;
-use common\models\LoginForm;
-use common\models\ProductCategory;
-use common\models\Product;
 use common\models\Membership;
+use common\models\Product;
+use common\models\ProductCategory;
 use common\models\User;
+use portal\models\ContactForm;
 use portal\models\PasswordResetRequestForm;
 use portal\models\ResetPasswordForm;
-use portal\models\SignupForm;
-use portal\models\ContactForm;
+use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            /*
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'only' => ['logout', 'signup'],
-                    'rules' => [
-                        [
-                            'actions' => ['signup'],
-                            'allow' => true,
-                            'roles' => ['?'],
-                        ],
-                        [
-                            'actions' => ['logout'],
-                            'allow' => true,
-                            'roles' => ['@'],
-                        ],
-                    ],
-                ],
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'logout' => ['post'],
-                    ],
-                ], */
-        ];
-    }
 
     /**
      * @inheritdoc
@@ -77,17 +42,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $allCategories = ProductCategory::find()->with('products')->all();
-        $allProducts = Product::find()->all();
-        $recProducts = array();
+        $categories = ProductCategory::find()->with('products')->all();
+        $recommendedProducts = Product::find()->where(['product_bidding_date' => ''])->all();
 
-        for ($i = 0; $i < 3; $i++) {
-            $currRand = rand(0, count($allProducts) - 1);
-            $recProducts[] = $allProducts[$currRand];
-        }
         return $this->render('index', [
-            'allCats' => $allCategories,
-            'recProducts' => $recProducts,
+            'recommendedProducts' => $recommendedProducts,
+            'categories' => $categories
         ]);
     }
 
@@ -110,38 +70,6 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Logs in a user.
-     *
-     * @return mixed
-     */
-    public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Logs out the current user.
-     *
-     * @return mixed
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
 
     /**
      * Displays contact page.
@@ -175,36 +103,6 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    public function actionSignup()
-    {
-        $model = new Membership();
-        $user = new User();
-        if ($model->load(Yii::$app->request->post())) {
-            $postReq = Yii::$app->request->post();
-            $user->username = $postReq['User']['username'];
-            $user->email = $postReq['User']['email'];
-            $user->new_password = $postReq['User']['new_password'];
-            $user->setPassword();
-            $user->save();
-            $model->membership_login_id = $user->id;
-            if ($model->save()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-            'user' => $user,
-        ]);
     }
 
     /**
@@ -256,17 +154,5 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Convert Date format
-     *
-     * @param $date
-     * @param string $format
-     * @return bool|string
-     */
-    private function convertDateFormat($date, $format = 'Y/m/d')
-    {
-        $date = str_replace('/', '-', $date);
 
-        return date($format, strtotime($date));
-    }
 }

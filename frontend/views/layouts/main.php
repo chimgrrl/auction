@@ -3,12 +3,12 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use yii\helpers\Html;
+use common\widgets\Alert;
+use frontend\assets\AppAsset;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use frontend\assets\AppAsset;
-use common\widgets\Alert;
 
 AppAsset::register($this);
 ?>
@@ -36,20 +36,18 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        // ['label' => 'About', 'url' => ['/site/about']],
-        // ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Signup', 'url' => ['/registration/signup']];
+        $menuItems[] = ['label' => 'Login', 'url' => ['/auth/login']];
     } else {
-$menuItems[] = ['label' => 'Membership', 'url' => ['/membership/mb-memberships']];
-		$menuItems[] = ['label' => 'Products', 'url' => ['/product/index']];
-		$menuItems[] = ['label' => 'Product Categories', 'url' => ['/product-category/index']];
-		$menuItems[] = ['label' => 'Product Specifications', 'url' => ['/product-specification/index']];
+        $menuItems[] = ['label' => 'Membership', 'url' => ['/membership/mb-memberships']];
+        $menuItems[] = ['label' => 'Products', 'url' => ['/product/index']];
+        $menuItems[] = ['label' => 'Product Categories', 'url' => ['/product-category/index']];
+        $menuItems[] = ['label' => 'Product Specifications', 'url' => ['/product-specification/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-            'url' => ['/site/logout'],
+            'url' => ['/auth/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];
     }
