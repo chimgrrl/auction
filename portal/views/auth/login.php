@@ -1,9 +1,5 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \common\models\LoginForm */
-
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
@@ -21,13 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-5">
                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'username') ?>
+                <?= $form->field($loginForm, 'username') ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <?= $form->field($loginForm, 'password')->passwordInput() ?>
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                <?= $form->field($loginForm, 'rememberMe')->checkbox() ?>
 
-                <?= $form->field($model, 'role')->hiddenInput(['value' => 'member'])->label(false) ?>
+                <?= $form->field($loginForm, 'role')->hiddenInput(['value' => 'member'])->label(false) ?>
 
                 <div style="color:#999;margin:1em 0">
                     If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.

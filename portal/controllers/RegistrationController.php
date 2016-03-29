@@ -40,7 +40,7 @@ class RegistrationController extends Controller
 
         return $this->render('signup', [
             'membership' => $membership,
-            'signUp' => $signUpForm,
+            'signUpForm' => $signUpForm,
             'productCategories' => $parentCategories
         ]);
     }

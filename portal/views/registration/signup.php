@@ -1,6 +1,5 @@
 <?php
 
-/* @var $this yii\web\View */
 use kartik\widgets\DatePicker;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
@@ -11,7 +10,7 @@ $this->title = 'iDeal - Signup';
 $this->registerJs("
 $('document').ready(function(){
     $('.reset-button').click(function(){
-            $('.signUpForm').trigger('reset');
+        $('.signUpForm').trigger('reset');
     });
 });
 
@@ -33,29 +32,29 @@ $('document').ready(function(){
                     <div>
                         <p>* Must be Filled</p>
 
-                        <?= $form->field($signUp, 'username')->textInput(['placeholder' => '*Username'])->label(false) ?>
+                        <?= $form->field($signUpForm, 'username')->textInput(['placeholder' => '*Username'])->label(false) ?>
 
-                        <?= $form->field($signUp,
+                        <?= $form->field($signUpForm,
                             'membership_first_name')->textInput(['placeholder' => 'First Name'])->label(false) ?>
 
-                        <?= $form->field($signUp,
+                        <?= $form->field($signUpForm,
                             'membership_last_name')->textInput(['placeholder' => 'Last Name'])->label(false) ?>
 
-                        <?= $form->field($signUp,
+                        <?= $form->field($signUpForm,
                             'password')->passwordInput(['placeholder' => '*Password'])->label(false) ?>
 
-                        <?= $form->field($signUp,
+                        <?= $form->field($signUpForm,
                             'password_confirmation')->passwordInput(['placeholder' => '*Re-enter Password'])->label(false) ?>
 
-                        <?= $form->field($signUp, 'email')->textInput(['placeholder' => '*Email'])->label(false) ?>
+                        <?= $form->field($signUpForm, 'email')->textInput(['placeholder' => '*Email'])->label(false) ?>
 
-                        <?= $form->field($signUp,
+                        <?= $form->field($signUpForm,
                             'membership_contact_telephone')->textInput(['placeholder' => '*Mobile Phone Number'])->label(false) ?>
 
-                        <?= $form->field($signUp,
+                        <?= $form->field($signUpForm,
                             'membership_address')->textInput(['placeholder' => '*Address'])->label(false) ?>
 
-                        <?= $form->field($signUp, 'membership_date_of_birth')->widget(DatePicker::classname(), [
+                        <?= $form->field($signUpForm, 'membership_date_of_birth')->widget(DatePicker::classname(), [
                             'options' => ['placeholder' => 'Date of Birth'],
                             'pluginOptions' => [
                                 'format' => 'm/d/yyyy',
@@ -76,7 +75,8 @@ $('document').ready(function(){
                                 </label>
                             <?php endforeach; ?>
                         </div>
-                        <?= $form->field($signUp, 'captcha')->widget(Captcha::className())->label(false) ?>
+
+                        <?= $form->field($signUpForm, 'captcha')->widget(Captcha::className())->label(false) ?>
 
                     </div>
                 </div>

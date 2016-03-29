@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\web\View;
 
 $this->title = 'iDeal - ' . $product->product_name;
 ?>
@@ -9,8 +8,8 @@ $this->title = 'iDeal - ' . $product->product_name;
     <section class="sections">
         <div class="container">
 
-            <div class="nav-category"><?= Html::a('Home', '@web') ?> ><a
-                    href="#"><?= $product->productCategory->product_category_name ?></a></div>
+            <div class="nav-category"><?php echo Html::a('Home', '@web') ?> ><a
+                    href="#"><?php echo $product->productCategory->product_category_name ?></a></div>
 
             <div class="product-container">
                 <div class="row">
@@ -19,13 +18,13 @@ $this->title = 'iDeal - ' . $product->product_name;
                             <div class="carousel-list">
                                 <div role="listbox" class="carousel-inner">
                                     <div class="item">
-                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                        <?php echo Html::img($product->getUploadedFileUrl('product_picture')) ?>
                                     </div>
                                     <div class="item active">
-                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                        <?php echo Html::img($product->getUploadedFileUrl('product_picture')) ?>
                                     </div>
                                     <div class="item">
-                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                        <?php echo Html::img($product->getUploadedFileUrl('product_picture')) ?>
                                     </div>
                                 </div>
 
@@ -40,19 +39,19 @@ $this->title = 'iDeal - ' . $product->product_name;
                             <div class="indicators-wrapper">
                                 <ol class="carousel-indicators">
                                     <li class="" data-slide-to="0"
-                                        data-target="#product-carousel"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                        data-target="#product-carousel"> <?php echo Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
                                     <li data-slide-to="1" data-target="#product-carousel"
-                                        class="active"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                        class="active"> <?php echo Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
                                     <li data-slide-to="2" data-target="#product-carousel"
-                                        class=""> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                        class=""> <?php echo Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
                                 </ol>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-sm-7">
-                        <div class="item-name"><?= $product->product_name ?></div>
-                        <p><?= $product->product_desc ?> </p>
+                        <div class="item-name"><?php echo $product->product_name ?></div>
+                        <p><?php echo $product->product_desc ?> </p>
 
                         <div class="product-item-price"><span>$200,000</span><span>$400,000</span></div>
                         <div class="item-label">14 people bought</div>
@@ -81,7 +80,6 @@ $this->title = 'iDeal - ' . $product->product_name;
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="row">
@@ -93,7 +91,7 @@ $this->title = 'iDeal - ' . $product->product_name;
                             <div class="tab-pane fade in active" id="product-tab-one">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                        <?php echo Html::img($product->getUploadedFileUrl('product_picture')) ?>
                                     </div>
                                     <div class="col-sm-6">
                                         <p><?php echo $product->product_desc ?></p>

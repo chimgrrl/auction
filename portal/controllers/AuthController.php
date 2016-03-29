@@ -15,16 +15,16 @@ class AuthController extends Controller
      */
     public function actionLogin()
     {
-        $model = new LoginForm();
+        $loginForm = new LoginForm();
 
         $post = Yii::$app->request->post();
 
-        if (($post) && $model->loginByRole($post['LoginForm'])) {
+        if (($post) && $loginForm->loginByRole($post['LoginForm'])) {
             return $this->goHome();
         }
 
         return $this->render('login', [
-            'model' => $model,
+            'loginForm' => $loginForm,
         ]);
 
     }

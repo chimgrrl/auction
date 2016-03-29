@@ -8,7 +8,7 @@ $this->title = 'iDeal - Product';
     <section class="sections">
         <div class="container">
             <h2>Product NOT Found</h2>
-            <p>GO <?= Html::a('back', ['/']) ?> to main page</p>
+            <p>GO <?php echo Html::a('back', ['/']) ?> to main page</p>
         </div>
 
     </section>
