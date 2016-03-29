@@ -52,6 +52,9 @@ $('document').ready(function(){
                             'membership_contact_telephone')->textInput(['placeholder' => '*Mobile Phone Number'])->label(false) ?>
 
                         <?= $form->field($signUpForm,
+                            'membership_current_points')->hiddenInput(['value' => 0])->label(false) ?>
+
+                        <?= $form->field($signUpForm,
                             'membership_address')->textInput(['placeholder' => '*Address'])->label(false) ?>
 
                         <?= $form->field($signUpForm, 'membership_date_of_birth')->widget(DatePicker::classname(), [

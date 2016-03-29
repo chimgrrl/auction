@@ -174,6 +174,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(MerchantBrand::className(), ['user_fk' => 'id']);
     }
 
+    public function getMembership()
+    {
+        return $this->hasOne(Membership::className(), ['membership_login_id' => 'id']);
+    }
+
     /**
      * @inheritdoc
      */
