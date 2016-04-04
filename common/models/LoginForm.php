@@ -60,7 +60,6 @@ class LoginForm extends Model
         }
     }
 
-
     /**
      * @param array $payload
      * @return bool|null

@@ -20,6 +20,7 @@ class SignupForm extends Model
     public $membership_first_name;
     public $membership_last_name;
     public $membership_date_of_birth;
+    public $membership_current_points;
     public $captcha;
 
     /**
