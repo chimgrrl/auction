@@ -5,122 +5,98 @@ use yii\web\View;
 
 $this->title = 'iDeal - ' . $product->product_name;
 ?>
-    <main>
+    <main class="main product-page">
         <section class="sections">
             <div class="container">
 
                 <div class="nav-category"><?= Html::a('Home', '@web') ?> ><a
                         href="#"><?= $product->productCategory->product_category_name ?></a></div>
 
-                <div class="product-container">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-5">
-                            <div data-ride="carousel" class="carousel slide" id="product-carousel">
-                                <div class="carousel-list">
-                                    <div role="listbox" class="carousel-inner">
-                                        <div class="item">
-                                            <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
-                                        </div>
-                                        <div class="item active">
-                                            <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
-                                        </div>
-                                        <div class="item">
-                                            <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
-                                        </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-5">
+                        <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-list">
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="item active">
+                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
                                     </div>
+                                    <div class="item">
+                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                    </div>
+                                    <div class="item">
+                                        <?= Html::img($product->getUploadedFileUrl('product_picture')) ?>
+                                    </div>
+                                </div>
 
-                                    <a data-slide="prev" role="button" href="#product-carousel"
-                                       class="left carousel-control"><i class="fa fa-angle-left"></i><span
-                                            class="sr-only">Previous</span></a>
-                                    <a data-slide="next" role="button" href="#product-carousel"
-                                       class="right carousel-control"><i class="fa fa-angle-right"></i><span
-                                            class="sr-only">Next</span></a>
-                                </div>
-                                <!-- Indicators -->
-                                <div class="indicators-wrapper">
-                                    <ol class="carousel-indicators">
-                                        <li class="" data-slide-to="0"
-                                            data-target="#product-carousel"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
-                                        <li data-slide-to="1" data-target="#product-carousel"
-                                            class="active"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
-                                        <li data-slide-to="2" data-target="#product-carousel"
-                                            class=""> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
-                                    </ol>
-                                </div>
+                                <a class="left carousel-control" href="#product-carousel" role="button"
+                                   data-slide="prev"><i class="fa fa-angle-left"></i><span
+                                        class="sr-only">Previous</span></a>
+                                <a class="right carousel-control" href="#product-carousel" role="button"
+                                   data-slide="next"><i class="fa fa-angle-right"></i><span class="sr-only">Next</span></a>
+                            </div>
+                            <!-- Indicators -->
+                            <div class="indicators-wrapper">
+                                <ol class="carousel-indicators">
+                                    <li class="" data-slide-to="0"
+                                        data-target="#product-carousel"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                    <li data-slide-to="1" data-target="#product-carousel"
+                                        class="active"> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                    <li data-slide-to="2" data-target="#product-carousel"
+                                        class=""> <?= Html::img($product->getUploadedFileUrl('product_picture')) ?></li>
+                                </ol>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-md-6 col-sm-7">
-                            <div class="item-name"><?= $product->product_name ?></div>
-                            <div class="item-desc"><?= $product->product_desc ?> </div>
+                    <div class="col-md-6 col-sm-7 product-item">
+                        <div class="item-name"><?= $product->product_name ?></div>
+                        <p><?= $product->product_desc ?> </p>
 
-                            <div class="item-label"><span>Seller:</span> Fai Wong</div>
-                            <div class="item-label"><span>Quantity:</span> 50</div>
+                        <div class="item-label"><span>Seller:</span> Fai Wong</div>
+                        <div class="item-label"><span>Quantity:</span> 50</div>
 
-                            <div class="item-ui-a">
+                        <div id="getting-started">
+                            <div class="item-counter">
 
-                                <div id="getting-started">
+                                <ul class="num-counter clearfix">
+                                    <li class="days-counter">
+                                        <span>Days</span>
+                                        <span class="first">0</span>
+                                        <span class="second">0</span>
+                                    </li>
 
-                                    <div class="item-counter"><!-- DateTime  -->
-                                        <div class="text-center fNumber">
-                                            <span>Days</span>
-                                            <div class="num-counter days-counter">
-                                                <span class="first"></span>
-                                                <span class="second"></span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center fNumber">
-                                            <span>Hours</span>
-                                            <div class="num-counter hours-counter">
-                                                <span class="first"></span>
-                                                <span class="second"></span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center fNumber">
-                                            <span>Minutes</span>
-                                            <div class="num-counter minutes-counter">
-                                                <span class="first"></span>
-                                                <span class="second"></span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center fNumber">
-                                            <span>Seconds</span>
-                                            <div class="num-counter seconds-counter">
-                                                <span class="first"></span>
-                                                <span class="second"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <li class="hours-counter">
+                                        <span>Hours</span>
+                                        <span class="first">0</span>
+                                        <span class="second">0</span>
+                                    </li>
 
-                                </div>
+                                    <li class="minutes-counter">
+                                        <span>Minutes</span>
+                                        <span class="first">0</span>
+                                        <span class="second">0</span>
+                                    </li>
 
-                                <div class="item-bid-price item-label"><span>Present Bidding Price:</span>$890999</div>
-                                <div class="item-bid-amount item-label">
-                                    <span>My Bidding Price:</span>
-                                    <input type="text" name="bidding"/></div>
-                                <br>
-
-                                <!-- Button With Price  -->
-                                <div class="fonts0 item-btn">
-                                    <div class="btn-group">
-                                        <button type="button"
-                                                class="btn btn-danger btn-hammer fNumber">
-                                            <?= Html::img('@web/img/ui/hammer.png') ?>
-                                            <span>BID NOW</span></button>
-                                    </div>
-                                </div>
-
-                                <div class="item-label">14 / 100 people bought</div>
-
-                                <div class="fonts0 item-btn">
-                                    <div class="btn-group">
-                                        <div class="item-label">14 / 100 people bought</div>
-                                        <button type="button" class="btn btn-default wish-btn"><i
-                                                class="fa fa-heart"></i><span>Add to wishlist</span></button>
-                                    </div>
-                                </div>
+                                    <li class="seconds-counter">
+                                        <span>Seconds</span>
+                                        <span class="first"></span>
+                                        <span class="second"></span>
+                                    </li>
+                                </ul>
                             </div>
+
                         </div>
+                        <div class="item-bid-price item-label"><span>Present Bidding Price:</span>$890999</div>
+                        <div class="item-bid-amount item-label"><span>My Bidding Price:</span><input type="text"/></div>
+
+                        <button type="button" class="btn btn-danger btn-hammer" id="bidNow">
+                            <?php echo Html::img('@web/img/ui/hammer.png') ?>
+                            <span>Bid now</span>
+                        </button>
+                        <div class="item-label">14 / 100 people bought</div>
+                        <button type="button" class="btn btn-default wish-btn"><i class="fa fa-heart"></i><span>Add to wishlist</span>
+                        </button>
+
                     </div>
 
                     <div class="row">
@@ -146,9 +122,6 @@ $this->title = 'iDeal - ' . $product->product_name;
                     </div>
 
                 </div>
-
-
-            </div>
         </section>
     </main>
 
@@ -174,8 +147,21 @@ $('#getting-started').countdown('" . $product->product_bidding_date . "', functi
         $('.hours-counter > span.first').text(hours[0]);
         $('.hours-counter > span.second').text(hours[1]);
 
-        $('.days-counter > span.first').text(days[0]);
-        $('.days-counter > span.second').text(days[1]);
+        $('.days-counter > span.first').text(days[1]);
+        $('.days-counter > span.second').text(days[2]);
+    });
+    
+
+    $('#bidNow').click(function(){
+   
+       var data = {myBiddingPrice:500,productId:'fnW3z1JS2z'};
+       
+        $.post('$bidUrl', data, function(result) {
+            if(result=='false'){
+                alert('pop up here');
+            }
+        });
+                
     });
 
 ", View::POS_END, 'my-options');

@@ -23,8 +23,12 @@ class ProductController extends BaseController
             return $this->render('product_404');
         }
 
+        $currentUser = (!empty($this->user->identity->username) ? $this->user->identity->username : '');
+
         return $this->render('bidding', [
-            'product' => $product
+            'product' => $product,
+            'currentUser' => $currentUser,
+            'bidUrl' => Yii::$app->getUrlManager()->createUrl('product/bidproduct')
         ]);
 
     }
@@ -48,6 +52,36 @@ class ProductController extends BaseController
         return $this->render('forsell', [
             'product' => $product
         ]);
+    }
+
+
+    /**
+     * Logs out the current user.
+     *
+     * @return mixed
+     */
+    public function actionBid()
+    {
+        return $this->render('bid', [
+        ]);
+    }
+
+    public function actionBidproduct()
+    {
+        $post = Yii::$app->request->post();
+
+        if (empty($this->user->identity->username)) {
+            return $this->redirect(['/auth/login']);
+        }
+
+        $productRequiredPoints = Product::findOne(['product_id' => $post['productId']])->product_required_points;
+        $currentPoints = $this->user->identity->membership->membership_current_points;
+
+        if ($currentPoints < $productRequiredPoints) {
+            return \yii\helpers\Json::encode(false);
+        }
+
+        return \yii\helpers\Json::encode(true);
     }
 
 }

@@ -4,8 +4,9 @@ use yii\helpers\Html;
 
 $this->title = 'iDeal';
 ?>
-<main id="home">
 
+<main class="main home">
+    
     <?php echo $this->render('partials/carousel', ['HTML' => Html::class]); ?>
 
     <?php echo $this->render('partials/recommended-products', [

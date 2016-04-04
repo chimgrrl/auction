@@ -33,6 +33,7 @@ use yii\behaviors\AttributeBehavior;
  * @property mixed $product_category_fk
  * @property mixed $product_specification_fk
  * @property mixed $merchant_brand_fk
+ * @property mixed $product_required_points
  */
 class Product extends \yii\mongodb\ActiveRecord
 {
@@ -101,6 +102,7 @@ class Product extends \yii\mongodb\ActiveRecord
             'product_category_fk',
             'product_specification_fk',
             'merchant_brand_fk',
+            'product_required_points'
         ];
     }
 
@@ -143,6 +145,7 @@ class Product extends \yii\mongodb\ActiveRecord
             'product_category_fk' => Yii::t('app', 'Product Category Fk'),
             'product_specification_fk' => Yii::t('app', 'Product Specification Fk'),
             'merchant_brand_fk' => Yii::t('app', 'Merchant Brand Fk'),
+            'product_required_points' => Yii::t('app', 'Product Required Points')
         ];
     }
 
