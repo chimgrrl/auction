@@ -68,6 +68,7 @@ class ProductController extends BaseController
 
     public function actionBidproduct()
     {
+        $result = true;
         $post = Yii::$app->request->post();
 
         if (empty($this->user->identity->username)) {
@@ -75,13 +76,14 @@ class ProductController extends BaseController
         }
 
         $productRequiredPoints = Product::findOne(['product_id' => $post['productId']])->product_required_points;
+
         $currentPoints = $this->user->identity->membership->membership_current_points;
 
         if ($currentPoints < $productRequiredPoints) {
-            return \yii\helpers\Json::encode(false);
+            $result = false;
         }
 
-        return \yii\helpers\Json::encode(true);
+        return \yii\helpers\Json::encode($result);
     }
 
 }
