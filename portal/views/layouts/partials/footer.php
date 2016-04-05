@@ -14,7 +14,6 @@
                 <li><?php echo $HTML::img('@web/img/ui/notify.png') ?><span>Notification</span></li>
             </div>
             <div class="fleft">© 2015 iDeal. All Rights Reserved.</div>
-
         </div>
     </div>
 </div>

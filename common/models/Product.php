@@ -29,11 +29,12 @@ use yii\behaviors\AttributeBehavior;
  * @property mixed $product_create_user_id
  * @property mixed $product_last_update_date
  * @property mixed $product_last_update_user_id
- * @property mixed $product_status
+ * @property mixed $product_statusd
  * @property mixed $product_category_fk
  * @property mixed $product_specification_fk
  * @property mixed $merchant_brand_fk
  * @property mixed $product_required_points
+ * @property mixed $product_bidding_price
  */
 class Product extends \yii\mongodb\ActiveRecord
 {
@@ -102,7 +103,8 @@ class Product extends \yii\mongodb\ActiveRecord
             'product_category_fk',
             'product_specification_fk',
             'merchant_brand_fk',
-            'product_required_points'
+            'product_required_points',
+            'product_bidding_price'
         ];
     }
 
@@ -145,7 +147,8 @@ class Product extends \yii\mongodb\ActiveRecord
             'product_category_fk' => Yii::t('app', 'Product Category Fk'),
             'product_specification_fk' => Yii::t('app', 'Product Specification Fk'),
             'merchant_brand_fk' => Yii::t('app', 'Merchant Brand Fk'),
-            'product_required_points' => Yii::t('app', 'Product Required Points')
+            'product_required_points' => Yii::t('app', 'Product Required Points'),
+            'product_bidding_price' => Yii::t('app', 'Product Bidding Price')
         ];
     }
 

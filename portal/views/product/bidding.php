@@ -86,7 +86,10 @@ $this->title = 'iDeal - ' . $product->product_name;
                             </div>
 
                         </div>
-                        <div class="item-bid-price item-label"><span>Present Bidding Price:</span>$890999</div>
+                        <div class="item-bid-price item-label">
+                            <span>Present Bidding Price:</span>
+                            $<?php echo $product->product_bidding_price ?>
+                        </div>
                         <div class="item-bid-amount item-label"><span>My Bidding Price:</span><input type="text"/></div>
 
                         <button type="button" class="btn btn-danger btn-hammer" id="bidNow">
@@ -125,6 +128,24 @@ $this->title = 'iDeal - ' . $product->product_name;
         </section>
     </main>
 
+    <div class="modal fade product-page-modal" id="credit-modal">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <!-- <div class="modal-header">
+
+                </div> -->
+                <div class="modal-body">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <p class="h4">You do not have enough ecoins.Would you like to purchase some?</p>
+                    <p>Please update within 3 days after your bidding accepted. Otherwise, your purchase will be
+                        cancelled.</p>
+                    <button href="#" class="btn btn-primary btn-danger">Add Credit</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 <?php
 
 $this->registerJsFile('@web/js/jquery.countdown.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
@@ -151,14 +172,17 @@ $('#getting-started').countdown('" . $product->product_bidding_date . "', functi
         $('.days-counter > span.second').text(days[2]);
     });
     
-
     $('#bidNow').click(function(){
    
        var data = {myBiddingPrice:500,productId:'fnW3z1JS2z'};
        
         $.post('$bidUrl', data, function(result) {
             if(result=='false'){
-                alert('pop up here');
+               $('#credit-modal').modal('show');
+            }
+            
+            if(result=='true'){
+                alert('successfully bid');
             }
         });
                 
