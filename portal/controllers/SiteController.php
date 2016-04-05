@@ -1,58 +1,23 @@
 <?php
 namespace portal\controllers;
 
-use Yii;
-use common\models\LoginForm;
-use common\models\ProductCategory;
-use common\models\Product;
 use common\models\Membership;
+use common\models\Product;
+use common\models\ProductCategory;
 use common\models\User;
+use portal\models\ContactForm;
 use portal\models\PasswordResetRequestForm;
 use portal\models\ResetPasswordForm;
-use portal\models\SignupForm;
-use portal\models\ContactForm;
+use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-		/* 
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
-                'rules' => [
-                    [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ], */
-        ];
-    }
 
     /**
      * @inheritdoc
@@ -77,64 +42,36 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $allCategories = ProductCategory::find()->with('products')->all();
-		$allProducts = Product::find()->all();
-		$recProducts = array();
-		
-		for($i=0;$i<3;$i++)
-		{
-			$currRand = rand(0,count($allProducts)-1);
-			$recProducts[] = $allProducts[$currRand];
-		}
-		return $this->render('index',[
-			'allCats' => $allCategories,
-			'recProducts' => $recProducts,
-		]);
+        $categories = ProductCategory::find()->with('products')->all();
+        $recommendedProducts = Product::find()
+            ->andWhere(['NOT', 'product_bidding_date', ''])
+            ->all();
+
+        return $this->render('index', [
+            'recommendedProducts' => $recommendedProducts,
+            'categories' => $categories
+        ]);
     }
-	
-	public function actionProduct()
+
+    public function actionProduct()
     {
-        $productId = Yii::$app->request->get('pid');
-		
-		$product = Product::find()->where(['product_id'=>$productId])->with('productCategory')->one();
-		
-		return $this->render('product',[
-			'product' => $product,
-		]);
+        $product = Product::find()->where(['product_id' => Yii::$app->request->get('pid')])
+            ->with('productCategory')
+            ->one();
+
+        $productCategory = ProductCategory::findOne(['product_category_id' => Yii::$app->request->get('cid')])
+            ->product_category_name;
+
+        $biddingDate = (!empty($product->product_bidding_date)) ?
+            $this->convertDateFormat($product->product_bidding_date) : '';
+
+        return $this->render('product', [
+            'product' => $product,
+            'biddingDate' => $biddingDate,
+            'productCategory' => $productCategory
+        ]);
     }
 
-    /**
-     * Logs in a user.
-     *
-     * @return mixed
-     */
-    public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Logs out the current user.
-     *
-     * @return mixed
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
 
     /**
      * Displays contact page.
@@ -146,7 +83,8 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                Yii::$app->session->setFlash('success',
+                    'Thank you for contacting us. We will respond to you as soon as possible.');
             } else {
                 Yii::$app->session->setFlash('error', 'There was an error sending email.');
             }
@@ -167,36 +105,6 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    public function actionSignup()
-    {
-        $model = new Membership();
-		$user = new User();
-        if ($model->load(Yii::$app->request->post())) {
-			$postReq = Yii::$app->request->post();
-			$user->username = $postReq['User']['username'];
-			$user->email = $postReq['User']['email'];
-			$user->new_password = $postReq['User']['new_password'];
-			$user->setPassword();
-			$user->save();
-			$model->membership_login_id = $user->id;
-            if ($model->save()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-            'user' => $user,
-        ]);
     }
 
     /**
@@ -247,4 +155,6 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+
 }

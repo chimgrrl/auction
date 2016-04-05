@@ -8,6 +8,7 @@ use common\models\ProductSpecificationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\Product;
 
 /**
  * ProductSpecificationController implements the CRUD actions for ProductSpecification model.
@@ -61,12 +62,14 @@ class ProductSpecificationController extends Controller
     public function actionCreate()
     {
         $model = new ProductSpecification();
+        $parentSpecifications = ProductSpecification::findAll(['product_specification_parent_id' => '']);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => (string)$model->_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'parentSpecifications' => $parentSpecifications
             ]);
         }
     }
@@ -81,11 +84,18 @@ class ProductSpecificationController extends Controller
     {
         $model = $this->findModel($id);
 
+        $parentSpecifications =
+            ProductSpecification::find()
+                ->where(['product_specification_parent_id' => ''])
+                ->andWhere(['NOT', 'product_specification_id', $model->product_specification_id])
+                ->all();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => (string)$model->_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'parentSpecifications' => $parentSpecifications
             ]);
         }
     }
@@ -117,5 +127,102 @@ class ProductSpecificationController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionGetSpecificationTree()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $productSpecificationKeys = $this->getProductSpecificationKeys(Yii::$app->request->get('productId'));
+
+        $productSpecifications = ProductSpecification::findAll(['product_specification_parent_id' => '']);
+
+        return $this->buildSpecificationTree($productSpecificationKeys, $productSpecifications);
+    }
+
+    /**
+     * @param int $productId
+     * @return array
+     */
+    private function getProductSpecificationKeys($productId)
+    {
+        $productSpecificationKeys = [];
+
+        if ($productId == '') {
+            return $productSpecificationKeys;
+        }
+
+        $productSpecifications = Product::findOne(['product_id' => $productId])->product_specification_fk;
+
+        if (!empty($productSpecifications)) {
+            $productSpecificationKeys = explode(',', $productSpecifications);
+        }
+
+        return $productSpecificationKeys;
+    }
+
+    /**
+     * @param array $productSpecificationKeys
+     * @param object $productSpecifications
+     * @return array
+     */
+    private function buildSpecificationTree($productSpecificationKeys, $productSpecifications)
+    {
+        $specifications = [];
+
+        foreach ($productSpecifications as $parentSpecification) {
+
+            $specification = [];
+
+            $specification['item'] = [
+                'id' => $parentSpecification->product_specification_id,
+                'label' => $parentSpecification->product_specification_name,
+                'checked' => $this->isChecked($parentSpecification->product_specification_id, $productSpecificationKeys)
+            ];
+
+            $specification = $this->attachChildSpecification(
+                $specification,
+                $productSpecificationKeys,
+                $parentSpecification);
+
+            $specifications[] = $specification;
+        }
+
+        return $specifications;
+    }
+
+    /**
+     * @param $specification
+     * @param array $productSpecificationKeys
+     * @param object $parentSpecification
+     * @return mixed
+     */
+    private function attachChildSpecification($specification, $productSpecificationKeys, $parentSpecification)
+    {
+        if (empty($parentSpecification->subspecifications)) {
+            return $specification;
+        }
+
+        $childSpecifications = $parentSpecification->subspecifications;
+
+        foreach ($childSpecifications as $childSpecification) {
+            $specification['children'][]['item'] = [
+                'id' => $childSpecification->product_specification_id,
+                'label' => $childSpecification->product_specification_name,
+                'checked' => $this->isChecked($childSpecification->product_specification_id, $productSpecificationKeys)
+            ];
+        }
+
+        return $specification;
+    }
+
+    /**
+     * @param int $productSpecificationId
+     * @param array $productSpecificationKeys
+     * @return bool
+     */
+    private function isChecked($productSpecificationId, $productSpecificationKeys)
+    {
+        return in_array($productSpecificationId, $productSpecificationKeys) ?: false;
     }
 }

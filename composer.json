@@ -24,8 +24,7 @@
         "kartik-v/yii2-icons": "^1.4",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-grid": "@dev",
-        "kartik-v/yii2-mpdf": "@dev",
-        "yii-dream-team/yii2-upload-behavior": "*"
+        "kartik-v/yii2-mpdf": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

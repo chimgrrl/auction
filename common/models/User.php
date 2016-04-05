@@ -25,7 +25,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-	public $new_password;
+    public $new_password;
 
     /**
      * @inheritdoc
@@ -45,12 +45,47 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
+        return [
+            'id',
+            'username',
+            'auth_key',
+            'password_hash',
+            'password_reset_token',
+            'email',
+            'status',
+            'created_at',
+            'updated_at',
+            'role'
+        ];
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
+            [
+                [
+                    'email',
+                    'username',
+                    'new_password'
+                ],
+                'required'
+            ],
+            ['email', 'email'],
+            [
+                ['email', 'username'],
+                'unique'
+            ],
+
+            [['username', 'email'], 'trim'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
@@ -113,7 +148,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
@@ -133,10 +168,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->auth_key;
     }
-	
-	public function getMerchantBrand()
+
+    public function getMerchantBrand()
     {
         return $this->hasOne(MerchantBrand::className(), ['user_fk' => 'id']);
+    }
+
+    public function getMembership()
+    {
+        return $this->hasOne(Membership::className(), ['membership_login_id' => 'id']);
     }
 
     /**
@@ -190,5 +230,36 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Stores new User
+     *
+     * @param $username
+     * @param $password
+     * @param $email
+     * @param $role
+     * @param bool $authKey
+     *
+     * @return $this|null
+     */
+    public function store($username, $password, $email, $role, $authKey = false)
+    {
+        $this->username = $username;
+        $this->email = $email;
+        $this->new_password = $password;
+        $this->role = $role;
+
+        $this->setPassword();
+
+        if ($authKey) {
+            $this->generateAuthKey();
+        }
+
+        if ($this->save()) {
+            return $this;
+        }
+
+        return null;
     }
 }

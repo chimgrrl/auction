@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\ProductSpecification */
@@ -12,8 +13,6 @@ use yii\bootstrap\ActiveForm;
 
     <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
 
-    <?= $form->field($model, 'product_specification_id') ?>
-
     <?= $form->field($model, 'product_specification_name') ?>
 
     <?= $form->field($model, 'product_specification_tag') ?>
@@ -21,10 +20,22 @@ use yii\bootstrap\ActiveForm;
     <?= $form->field($model, 'product_specification_prefix') ?>
 
     <?= $form->field($model, 'product_specification_value_price') ?>
-    
+
+    <div class="row">
+        <div class="control-label col-sm-3">
+            <label>Parent Specification</label>
+        </div>
+        <div class="col-sm-3">
+
+            <?= Html::activeRadioList($model, 'product_specification_parent_id',
+                ArrayHelper::map($parentSpecifications, 'product_specification_id', 'product_specification_name'),
+                ['class' => 'categoryOptionList']) ?>
+        </div>
+    </div>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'),
+            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
