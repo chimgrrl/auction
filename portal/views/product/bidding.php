@@ -168,8 +168,8 @@ $('#getting-started').countdown('" . $product->product_bidding_date . "', functi
         $('.hours-counter > span.first').text(hours[0]);
         $('.hours-counter > span.second').text(hours[1]);
 
-        $('.days-counter > span.first').text(days[1]);
-        $('.days-counter > span.second').text(days[2]);
+        $('.days-counter > span.first').text(days[0]);
+        $('.days-counter > span.second').text(days[1]);
     });
     
     $('#bidNow').click(function(){
