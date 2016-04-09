@@ -10,7 +10,9 @@
                             0) ?> Credits
                     </span>
                 </li>
-                <li><?php echo $HTML::img('@web/img/ui/addcredits.png') ?><span>Add Credits</span></li>
+                <li class="add-credits"><?php echo $HTML::img('@web/img/ui/addcredits.png') ?>
+                    <span>Add Credits</span>
+                </li>
                 <li><?php echo $HTML::img('@web/img/ui/notify.png') ?><span>Notification</span></li>
             </div>
             <div class="fleft">© 2015 iDeal. All Rights Reserved.</div>

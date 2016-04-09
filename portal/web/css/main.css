@@ -1608,3 +1608,18 @@ h2.category-title.category-4{background:#ffa200}
 .personal .history-menu > li.active.bid-menu-2 > a, .personal .history-menu > li.active.bid-menu-2 > a:focus, .personal .history-menu > li.active.bid-menu-2 > a:hover {
     background-color: #86b953;
 }
+
+.product-page-modal .modal-body { position: relative; text-align: center; padding: 30px; }
+.product-page-modal .modal-body .credit-rm { background-color: #ebebeb; padding: 15px; margin-top: 20px; }
+.product-page-modal .modal-body .credit-list { padding: 0; }
+.product-page-modal .modal-body .credit-list  li {  list-style: none;margin-top: 10px; padding: 0 50px; }
+.product-page-modal .modal-body .credit-list  li:before,
+.product-page-modal .modal-body .credit-list  li:after { display: table; content: ''; clear: both; }
+.product-page-modal .modal-body .credit-list  li div { line-height: 42px; }
+.product-page-modal .modal-body .credit-list  li div:first-child:before { position: absolute; width: 42px; height: 42px; top: 0 ; left: -42px;  content:url('../img/ui/credits2.png'); clear: both; }
+.product-page-modal .modal-body a.close { position: absolute; right: 30px; top: 20px; }
+
+.product-page-modal .modal-body ul>li:hover {
+    background-color: #ebebeb;
+    cursor: pointer;
+}

@@ -43,6 +43,8 @@ Icon::map($this, Icon::FA);
 
     <?php echo $this->render('partials/footer', ['HTML' => Html::class]); ?>
 
+    <?php echo $this->render('partials/add-credits-modal'); ?>
+
     <?php $this->endBody() ?>
     </body>
     </html>

@@ -230,4 +230,19 @@ class Membership extends \yii\mongodb\ActiveRecord
 
         return null;
     }
+
+    public function updateBiddingPoints($id, $points = 0)
+    {
+        $membership = $this->findOne(['membership_login_id' => $id]);
+
+        if(! $membership){
+            return null;
+        }
+
+        $membership->membership_current_points = $points;
+
+        $membership->save();
+
+        return $membership;
+    }
 }

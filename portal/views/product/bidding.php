@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\web\View;
+use yii\helpers\Url;
 
 $this->title = 'iDeal - ' . $product->product_name;
 ?>
@@ -9,7 +10,10 @@ $this->title = 'iDeal - ' . $product->product_name;
         <section class="sections">
             <div class="container">
 
-                <div class="nav-category"><?= Html::a('Home', '@web') ?> ><a
+                <div class="nav-category"><?= Html::a('Home', '@web') ?> >
+
+                    <img src="<?= Url::to(['route/qrcode']) ?>"/>
+                    <a
                         href="#"><?= $product->productCategory->product_category_name ?></a></div>
 
                 <div class="row">
@@ -90,7 +94,10 @@ $this->title = 'iDeal - ' . $product->product_name;
                             <span>Present Bidding Price:</span>
                             $<?php echo $product->product_bidding_price ?>
                         </div>
-                        <div class="item-bid-amount item-label"><span>My Bidding Price:</span><input type="text"/></div>
+                        <div class="item-bid-amount item-label">
+                            <span>My Bidding Price:</span>
+                            <input type="text" name="myBiddingPrice" id="myBiddingPrice">
+                        </div>
 
                         <button type="button" class="btn btn-danger btn-hammer" id="bidNow">
                             <?php echo Html::img('@web/img/ui/hammer.png') ?>
@@ -128,12 +135,10 @@ $this->title = 'iDeal - ' . $product->product_name;
         </section>
     </main>
 
-    <div class="modal fade product-page-modal" id="credit-modal">
+    <div class="modal fade product-page-modal" id="insufficient-credits-modal">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <!-- <div class="modal-header">
 
-                </div> -->
                 <div class="modal-body">
                     <a class="close" data-dismiss="modal">×</a>
                     <p class="h4">You do not have enough ecoins.Would you like to purchase some?</p>
@@ -174,19 +179,22 @@ $('#getting-started').countdown('" . $product->product_bidding_date . "', functi
     
     $('#bidNow').click(function(){
    
-       var data = {myBiddingPrice:500,productId:'fnW3z1JS2z'};
+       var myBiddingPrice = ($.isNumeric($('#myBiddingPrice').val())) ? $('#myBiddingPrice').val() : 0;
+       
+       var data = {myBiddingPrice:myBiddingPrice,productId:'$product->product_id'};
        
         $.post('$bidUrl', data, function(result) {
+        
             if(result=='false'){
-               $('#credit-modal').modal('show');
+               $('#insufficient-credits-modal').modal('show');
             }
             
             if(result=='true'){
-                alert('successfully bid');
+                alert('Bid successfully');
             }
         });
                 
     });
-
+    
 ", View::POS_END, 'my-options');
 ?>

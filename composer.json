@@ -24,7 +24,8 @@
         "kartik-v/yii2-icons": "^1.4",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-grid": "@dev",
-        "kartik-v/yii2-mpdf": "@dev"
+        "kartik-v/yii2-mpdf": "@dev",
+        "2amigos/yii2-qrcode-helper" : "~1.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

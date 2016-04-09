@@ -1,12 +1,25 @@
 <?php
 namespace portal\controllers;
 
+use common\models\Membership;
 use common\models\Product;
 use Yii;
+use common\models\MembershipProductBid;
+use dosamigos\qrcode\formats\MailTo;
+use dosamigos\qrcode\QrCode;
 
 
 class ProductController extends BaseController
 {
+
+    public function actionQrcode()
+    {
+        $mailTo = new MailTo(['email' => 'email@example.com']);
+        return QrCode::png($mailTo->getText());
+        // you could also use the following
+        // return return QrCode::png($mailTo);
+    }
+
     /**
      * Logs in a user.
      *
@@ -68,7 +81,6 @@ class ProductController extends BaseController
 
     public function actionBidproduct()
     {
-        $result = true;
         $post = Yii::$app->request->post();
 
         if (empty($this->user->identity->username)) {
@@ -76,14 +88,30 @@ class ProductController extends BaseController
         }
 
         $productRequiredPoints = Product::findOne(['product_id' => $post['productId']])->product_required_points;
-
         $currentPoints = $this->user->identity->membership->membership_current_points;
 
         if ($currentPoints < $productRequiredPoints) {
-            $result = false;
+            return \yii\helpers\Json::encode(false);
         }
 
-        return \yii\helpers\Json::encode($result);
+        $productBid = [
+            'MembershipProductBid' => [
+                'product_fk' => $post['productId'],
+                'membership_fk' => $this->user->identity->membership->membership_login_id,
+                'bidding_price' => $post['myBiddingPrice'],
+                'status' => "pending"
+            ]
+        ];
+
+        if ((new MembershipProductBid)->store($productBid)) {
+            (new Membership())->updateBiddingPoints(
+                $this->user->identity->membership->membership_login_id,
+                ($currentPoints - $productRequiredPoints)
+            );
+        }
+
+        return \yii\helpers\Json::encode(true);
     }
+    
 
 }

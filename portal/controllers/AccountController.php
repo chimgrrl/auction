@@ -1,11 +1,10 @@
 <?php
 namespace portal\controllers;
 
-use Yii;
-use yii\web\Controller;
 use common\models\Membership;
+use Yii;
 
-class AccountController extends Controller
+class AccountController extends BaseController
 {
     public function actionProfile()
     {
@@ -17,5 +16,19 @@ class AccountController extends Controller
             'user' => Yii::$app->user->identity,
             'member' => $member,
         ]);
+    }
+
+    public function actionAddcredits()
+    {
+        if (empty(Yii::$app->user->identity)) {
+            return false;
+        }
+
+        (new Membership())->updateBiddingPoints(
+            $this->user->identity->membership->membership_login_id,
+            ($this->user->identity->membership->membership_current_points + Yii::$app->request->get('credit'))
+        );
+
+        return true;
     }
 }
